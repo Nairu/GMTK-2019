@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export (float) var acceleration_straight = 10
 export (float) var acceleration_angle = 7.77
-export (float) var top_speed = 500
+export (float) var top_speed = 350
 
 var motion = Vector2()
 var currentDirection = 0
@@ -12,7 +12,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("ui_accept"):
 		currentDirection = (currentDirection + 45) % 360
 		$Sprite.rotation_degrees = currentDirection
-		current_speed = 100
+		# current_speed = 100
 		
 	if currentDirection == 0:
 			motion = Vector2(0,-current_speed)
