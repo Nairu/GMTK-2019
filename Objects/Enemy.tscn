@@ -7,6 +7,7 @@
 extents = Vector2( 15, 16 )
 
 [node name="EnemyNode" type="KinematicBody2D"]
+collision_layer = 2
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -14,5 +15,6 @@ rotation = 1.57079
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 2, 0 )
 shape = SubResource( 1 )

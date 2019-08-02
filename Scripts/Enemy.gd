@@ -1,4 +1,28 @@
 extends KinematicBody2D
+
+var player_node = null
+var player_dir = Vector2()
+var screen_size
+var screen_buffer = 20
+
+func _ready():
+	screen_size = get_viewport_rect().size
+
+func _physics_process(delta):
+	
+	if player_node == null:
+		player_node = get_node("/root/BaseNode/ShipNode")
+		player_dir = (player_node.get_transform().origin - get_transform().origin).normalized()
+		look_at(player_node.get_transform().origin)
+		
+	move_and_slide(player_dir * 200)
+	
+	if position.x > screen_size.x + screen_buffer or position.x < -screen_buffer or position.y > screen_size.y + screen_buffer or position.y < -screen_buffer:
+		queue_free()
+
+func _process(delta):
+	if is_colliding():
+		var collider = get_collider()
 #
 #export (Vector2) var acceleration_straight = 10
 #export (float) var acceleration_angle = 7.77
