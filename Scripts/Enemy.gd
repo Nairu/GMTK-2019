@@ -1,4 +1,8 @@
-extends KinematicBody2D
+extends Area2D
+
+signal player_hit
+
+export(bool) var is_enemy = true
 
 var player_node = null
 var player_dir = Vector2()
@@ -7,6 +11,7 @@ var screen_buffer = 20
 
 func _ready():
 	screen_size = get_viewport_rect().size
+	self.connect("area_entered", self, "_on_Ship_body_entered") 
 
 func _physics_process(delta):
 	
@@ -15,14 +20,21 @@ func _physics_process(delta):
 		player_dir = (player_node.get_transform().origin - get_transform().origin).normalized()
 		look_at(player_node.get_transform().origin)
 		
-	move_and_slide(player_dir * 200)
+	#move_and_slide(player_dir * 200)
+	position.x = lerp(position.x, position.x + (player_dir.x * 200), delta)
+	position.y = lerp(position.y, position.y + (player_dir.y * 200), delta)
 	
 	if position.x > screen_size.x + screen_buffer or position.x < -screen_buffer or position.y > screen_size.y + screen_buffer or position.y < -screen_buffer:
 		queue_free()
 
-func _process(delta):
-	if is_colliding():
-		var collider = get_collider()
+func _on_Ship_body_entered(body):
+	if (not body.get("is_player") == null):
+		emit_signal("player_hit")
+		body.was_hit = true
+
+#func _process(delta):
+#	if is_colliding():
+#		var collider = get_collider()
 #
 #export (Vector2) var acceleration_straight = 10
 #export (float) var acceleration_angle = 7.77

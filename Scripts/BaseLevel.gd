@@ -1,12 +1,16 @@
 extends Node2D
 
+signal player_was_hit
 
 var timer = null
-var scene = load("res://Objects/Enemy.tscn")
+export (PackedScene) var enemy = load("res://Objects/Enemy.tscn")
+
 var project_resolution = Vector2()
+var player_node = null
 
 func _ready():
 	project_resolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))	
+	player_node = get_node("/root/BaseNode/ShipNode")
 	
 	timer = Timer.new()
 	add_child(timer)
@@ -16,9 +20,13 @@ func _ready():
 	timer.set_one_shot(false)
 	timer.start()
 
+func _on_player_hit():
+	emit_signal("player_was_hit")
+
 func _on_Timer_timeout():
-	var enemy_instance = scene.instance()
+	var enemy_instance = enemy.instance()
 	enemy_instance.set_name("Enemy")
+	enemy_instance.connect("player_hit", self, "_on_player_hit")
 	var edge = randf();
 	
 	var x = 0

@@ -15,7 +15,7 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=2]
 radius = 2.0
 
-[node name="BulletNode" type="KinematicBody2D"]
+[node name="BulletNode" type="Area2D"]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource( 1 )
@@ -24,9 +24,4 @@ script = ExtResource( 1 )
 frames = SubResource( 1 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
-
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 2 )
