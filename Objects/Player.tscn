@@ -16,6 +16,7 @@ radius = 4.0
 collision_mask = 7
 script = ExtResource( 1 )
 bullet = ExtResource( 2 )
+use_slowdown = true
 game_over_scene = "res://Scenes/GameOver.tscn"
 
 [node name="Trail" parent="." instance=ExtResource( 3 )]
@@ -30,6 +31,7 @@ trail_length = 20
 texture = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -2 )
 shape = SubResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
