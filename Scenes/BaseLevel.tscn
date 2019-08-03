@@ -1,13 +1,24 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/BaseLevel.gd" type="Script" id=1]
-[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Objects/Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Objects/UI.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Objects/pop_label.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Objects/Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Objects/Powerups/Powerup-Trail.tscn" type="PackedScene" id=7]
 
 [node name="BaseNode" type="Node2D"]
 position = Vector2( 11, 2 )
 script = ExtResource( 1 )
+enemy = ExtResource( 2 )
+ui_scene = ExtResource( 3 )
+pop_label = ExtResource( 4 )
+player = ExtResource( 5 )
+starfield = ExtResource( 6 )
+powerup_trail = ExtResource( 7 )
 
-[node name="Starfield" parent="." instance=ExtResource( 2 )]
+[node name="Starfield" parent="." instance=ExtResource( 6 )]
 position = Vector2( -680, -593 )
 star_count = 2000
 window_size = Vector2( 2000, 2000 )

@@ -3,5 +3,4 @@
 [ext_resource path="res://Scripts/Trail.gd" type="Script" id=1]
 
 [node name="Trail" type="Line2D"]
-texture_mode = 1937074532
 script = ExtResource( 1 )
