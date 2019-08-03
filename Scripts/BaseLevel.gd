@@ -73,7 +73,7 @@ func _on_enemy_hit(position):
 	
 	var powerup =  powerup_trail.instance()
 	powerup.position = position
-	#powerup.life_duration = 5
+	powerup.connect("powerup_trail_pickup", self, "_on_powerup_trail_pickup")
 	add_child(powerup)
 
 func _on_Timer_timeout():
@@ -105,3 +105,6 @@ func _on_Timer_timeout():
 	enemy_instance.position = Vector2(x,y)
 	
 	add_child(enemy_instance)
+	
+func _on_powerup_trail_pickup():
+	print("AWHAT")
