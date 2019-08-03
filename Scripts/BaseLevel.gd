@@ -30,6 +30,10 @@ func _ready():
 	timer.set_one_shot(false)
 	timer.start()
 
+func _process(delta):
+	if Input.is_action_just_pressed("ui_cancel"):
+		get_tree().quit()
+
 func _on_enemy_hit(position):
 	var label_instance = pop_label.instance()
 	label_instance.position = position
