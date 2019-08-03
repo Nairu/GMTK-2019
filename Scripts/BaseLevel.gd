@@ -9,6 +9,8 @@ export (PackedScene) var pop_label = load("res://Objects/pop_label.tscn")
 export (PackedScene) var player = load("res://Objects/Player.tscn")
 export (PackedScene) var starfield = load("res://Objects/Starfield.tscn")
 
+export (PackedScene) var powerup_trail = load("res://Objects/Powerups/Powerup-Trail.tscn")
+
 export (Vector2) var play_area = Vector2(10000, 10000)
 
 var player_viewable_bounds = Rect2(0, 0, 1, 1)
@@ -22,6 +24,8 @@ var starfield_instance = null
 var score = 0
 var combo = 1
 var base_points = 100
+
+var powerup = null
 
 func _ready():
 	player_node = player.instance()
@@ -66,6 +70,11 @@ func _on_enemy_hit(position):
 	combo = combo + 1
 	add_child(label_instance)
 	ui_instance.set_score(Globals.score)
+	
+	var powerup =  powerup_trail.instance()
+	powerup.position = position
+	#powerup.life_duration = 5
+	add_child(powerup)
 
 func _on_Timer_timeout():
 	var enemy_instance = enemy.instance()
