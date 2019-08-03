@@ -107,4 +107,4 @@ func _on_Timer_timeout():
 	add_child(enemy_instance)
 	
 func _on_powerup_trail_pickup():
-	print("AWHAT")
+	print("")

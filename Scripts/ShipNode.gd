@@ -56,7 +56,8 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_released("ui_accept"):
 		currentDirection = (currentDirection + 45)
-		
+		timer.start()
+		_on_Timer_timeout()
 		length = 0		
 		#117600 - cYCLONE1370
 	if not $Sprite.rotation_degrees == currentDirection:
