@@ -11,6 +11,7 @@ script = ExtResource( 1 )
 [node name="ShipNode" parent="." instance=ExtResource( 2 )]
 position = Vector2( 501, 298 )
 top_speed = 250.0
+slow_factor = 2.5
 
 [node name="Starfield" parent="." instance=ExtResource( 3 )]
 position = Vector2( -680, -593 )
