@@ -1,20 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scripts/BaseLevel.gd" type="Script" id=1]
-[ext_resource path="res://Objects/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=2]
 
 [node name="BaseNode" type="Node2D"]
 position = Vector2( 11, 2 )
 script = ExtResource( 1 )
 
-[node name="ShipNode" parent="." instance=ExtResource( 2 )]
-position = Vector2( 501, 298 )
-top_speed = 250.0
-use_slowdown = true
-slow_factor = 2.5
-
-[node name="Starfield" parent="." instance=ExtResource( 3 )]
+[node name="Starfield" parent="." instance=ExtResource( 2 )]
 position = Vector2( -680, -593 )
 star_count = 2000
 window_size = Vector2( 2000, 2000 )

@@ -56,8 +56,9 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_released("ui_accept"):
 		currentDirection = (currentDirection + 45)
-		length = 0		
 		
+		length = 0		
+		#117600 - cYCLONE1370
 	if not $Sprite.rotation_degrees == currentDirection:
 		$Sprite.rotation_degrees = lerp($Sprite.rotation_degrees, (360 if currentDirection == 0 else currentDirection), delta*rotation_speed)
 		
