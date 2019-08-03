@@ -34,7 +34,7 @@ func _on_enemy_hit(position):
 	var label_instance = pop_label.instance()
 	label_instance.position = position
 	label_instance.text = str(base_points * combo)
-	Globals.score = score + base_points * combo
+	Globals.score = (Globals.score + base_points * combo)
 	combo = combo + 1
 	add_child(label_instance)
 	ui_instance.set_score(Globals.score)
