@@ -1,5 +1,7 @@
 extends Area2D
 
+signal enemy_hit
+
 export(PackedScene) var bullet = load("res://Objects/Bullet.tscn")
 export(bool) var is_player = true
 export(bool) var was_hit = false
@@ -7,6 +9,8 @@ export(bool) var was_hit = false
 export (float) var acceleration_straight = 10
 export (float) var top_speed = 350
 export (float) var rotation_speed = 10.0
+
+export (String, FILE, "*.tscn") var game_over_scene
 
 var motion = Vector2()
 var currentDirection = 0
@@ -30,12 +34,16 @@ func _on_Timer_timeout():
 	bullet_instance.set_name("Bullet")
 	bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)*300
 	bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+	bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
 	get_parent().add_child(bullet_instance)
+
+func _on_enemy_hit(position):
+	emit_signal("enemy_hit", position)
 
 func _process(delta):
 	if was_hit:
-		print("We died!")
-		get_tree().reload_current_scene()
+		# Soon we will go to the game over screen, but for now just keep it as a restart.
+		get_tree().change_scene(game_over_scene)
 
 func _physics_process(delta):
 	

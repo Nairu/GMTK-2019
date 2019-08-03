@@ -3,11 +3,13 @@ extends Node2D
 export (Vector2) var final_scale = Vector2(1.5, 1.5)
 export (float) var float_distance = 100
 export (float) var duration = 0.25
+export var text = ""
 
 func _ready():
 	pop()
 	
 func pop():
+	$label.text = self.text
 	$tween.interpolate_property(self, "scale", scale, final_scale,
 			duration, Tween.TRANS_BACK, Tween.EASE_IN_OUT)
 			

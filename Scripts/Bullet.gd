@@ -3,7 +3,7 @@ extends Area2D
 var direction = Vector2(0, 1)
 var area = null
 
-export (PackedScene) var pop_label = load("res://Objects/pop_label.tscn")
+signal enemy_hit
 
 func _ready():
 	connect("area_entered", self, "_on_Bullet_body_entered")
@@ -16,6 +16,4 @@ func _physics_process(delta):
 func _on_Bullet_body_entered(body):
 	if (not body.get("is_enemy") == null):
 		body.queue_free()
-		var label_instance = pop_label.instance()
-		label_instance.position = body.position
-		get_parent().get_parent().add_child(label_instance)
+		emit_signal("enemy_hit", body.position)

@@ -24,8 +24,8 @@ func _physics_process(delta):
 	position.x = lerp(position.x, position.x + (player_dir.x * 200), delta)
 	position.y = lerp(position.y, position.y + (player_dir.y * 200), delta)
 	
-	if position.x > screen_size.x + screen_buffer or position.x < -screen_buffer or position.y > screen_size.y + screen_buffer or position.y < -screen_buffer:
-		queue_free()
+#	if position.x > screen_size.x + screen_buffer or position.x < -screen_buffer or position.y > screen_size.y + screen_buffer or position.y < -screen_buffer:
+#		queue_free()
 
 func _on_Ship_body_entered(body):
 	if (not body.get("is_player") == null):

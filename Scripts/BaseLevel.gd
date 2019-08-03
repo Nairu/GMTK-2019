@@ -4,13 +4,23 @@ signal player_was_hit
 
 var timer = null
 export (PackedScene) var enemy = load("res://Objects/Enemy.tscn")
+export (PackedScene) var ui_scene = load("res://Objects/UI.tscn")
+export (PackedScene) var pop_label = load("res://Objects/pop_label.tscn")
 
 var project_resolution = Vector2()
 var player_node = null
+var ui_instance = null
+var score = 0
+var combo = 1
+var base_points = 100
 
 func _ready():
 	project_resolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))	
 	player_node = get_node("/root/BaseNode/ShipNode")
+	player_node.connect("enemy_hit", self, "_on_enemy_hit")
+	
+	ui_instance = ui_scene.instance()
+	$CanvasLayer.add_child(ui_instance)
 	
 	timer = Timer.new()
 	add_child(timer)
@@ -20,8 +30,14 @@ func _ready():
 	timer.set_one_shot(false)
 	timer.start()
 
-func _on_player_hit():
-	emit_signal("player_was_hit")
+func _on_enemy_hit(position):
+	var label_instance = pop_label.instance()
+	label_instance.position = position
+	label_instance.text = str(base_points * combo)
+	Globals.score = score + base_points * combo
+	combo = combo + 1
+	add_child(label_instance)
+	ui_instance.set_score(Globals.score)
 
 func _on_Timer_timeout():
 	var enemy_instance = enemy.instance()

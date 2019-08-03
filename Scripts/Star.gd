@@ -10,7 +10,8 @@ var speed = 0
 
 var is_static = false
 
-onready var window_size = get_viewport_rect().size
+#onready var window_size = get_viewport_rect().size
+export(Vector2) var window_size
 
 func prepare(is_static):
 	self.is_static = is_static

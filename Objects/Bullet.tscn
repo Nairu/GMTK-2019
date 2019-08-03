@@ -13,7 +13,7 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 5.05242
+radius = 2.0
 
 [node name="BulletNode" type="Area2D"]
 collision_layer = 4
