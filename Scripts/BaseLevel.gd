@@ -72,6 +72,7 @@ func _on_enemy_hit(position):
 	ui_instance.set_score(Globals.score)
 	
 	var powerup =  powerup_trail.instance()
+	powerup.prepare(powerup.Powerup_Type.TRAIL)
 	powerup.position = position
 	powerup.connect("powerup_trail_pickup", self, "_on_powerup_trail_pickup")
 	add_child(powerup)
@@ -106,5 +107,5 @@ func _on_Timer_timeout():
 	
 	add_child(enemy_instance)
 	
-func _on_powerup_trail_pickup():
-	print("AWHAT")
+func _on_powerup_trail_pickup(powerup):
+	print(powerup)
