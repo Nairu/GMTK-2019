@@ -16,14 +16,4 @@ pop_label = ExtResource( 4 )
 player = ExtResource( 5 )
 starfield = ExtResource( 6 )
 
-[node name="ShipNode" parent="." instance=ExtResource( 2 )]
-position = Vector2( 501, 298 )
-top_speed = 250.0
-slow_factor = 2.5
-
-[node name="Starfield" parent="." instance=ExtResource( 3 )]
-position = Vector2( -680, -593 )
-star_count = 2000
-window_size = Vector2( 2000, 2000 )
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

@@ -8,19 +8,36 @@ var player_node = null
 var player_dir = Vector2()
 var screen_size
 var screen_buffer = 20
-var animating = false
+var animating = true
+
+var spawn_position = Vector2()
 
 func _ready():
 	screen_size = get_viewport_rect().size
 	self.connect("area_entered", self, "_on_Ship_body_entered") 
 	# Do an initial entry animation and then fly on.
 	$Sprite.visible = false
+	$Wormhole.modulate.a = 0	
     
 func _process(delta):
+	$Wormhole.modulate.a = min($Wormhole.modulate.a + 0.01, 1)
+	$Wormhole.rotation_degrees = $Wormhole.rotation_degrees + 1
+	$Wormhole.scale.x = lerp($Wormhole.scale.x, 3, 0.01)
+	$Wormhole.scale.y = lerp($Wormhole.scale.y, 3, 0.01)
 	
+	if $Wormhole.modulate.a == 1:
+		spawn_position = position
+		animating = false		
+		$Sprite.visible = true
+	    
 func _physics_process(delta):
 	if animating:
-		pass
+		return
+	
+	if $Wormhole.modulate.a > 0:
+		$Wormhole.modulate.a = $Wormhole.modulate.a - 0.2
+	else:
+		$Wormhole.visible = false
 	
 	if player_node == null:
 		player_node = get_node("/root/BaseNode/Player")
