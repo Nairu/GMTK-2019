@@ -37,7 +37,7 @@ trail_length = 30
 [node name="Wormhole" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 1
+frame = 4
 playing = true
 
 [node name="Sprite" type="Sprite" parent="."]
