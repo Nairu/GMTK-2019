@@ -7,8 +7,11 @@ export(bool) var is_player = true
 export(bool) var was_hit = false
 
 export (float) var acceleration_straight = 10
+export (float) var acceleration_slow = -10
 export (float) var top_speed = 350
+export (float) var min_speed = 100
 export (float) var rotation_speed = 10.0
+export (float) var slow_factor = 1.1
 
 export (String, FILE, "*.tscn") var game_over_scene
 
@@ -45,14 +48,19 @@ func _process(delta):
 		# Soon we will go to the game over screen, but for now just keep it as a restart.
 		get_tree().change_scene(game_over_scene)
 
+var length = 0
 func _physics_process(delta):
 	
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_released("ui_accept"):
 		currentDirection = (currentDirection + 45)
-		#$Sprite.rotation_degrees = currentDirection
-		#current_speed = 100
+		length = 0
+		
 	if not $Sprite.rotation_degrees == currentDirection:
 		$Sprite.rotation_degrees = lerp($Sprite.rotation_degrees, (360 if currentDirection == 0 else currentDirection), delta*rotation_speed)
+		
+	if Input.is_action_pressed("ui_accept"):
+		current_speed = current_speed + acceleration_slow * slow_factor
+		current_speed = max(current_speed, min_speed)	
 		
 	if currentDirection % 360 == 0:
 			motion = Vector2(0,-current_speed)
