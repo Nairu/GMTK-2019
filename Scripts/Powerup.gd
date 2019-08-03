@@ -1,5 +1,7 @@
 extends Node2D
 
+signal powerup_trail_pickup
+
 export var life_duration = 5
 var current_life = 0
 
