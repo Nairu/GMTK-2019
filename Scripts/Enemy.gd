@@ -8,15 +8,22 @@ var player_node = null
 var player_dir = Vector2()
 var screen_size
 var screen_buffer = 20
+var animating = false
 
 func _ready():
 	screen_size = get_viewport_rect().size
 	self.connect("area_entered", self, "_on_Ship_body_entered") 
-
+	# Do an initial entry animation and then fly on.
+	$Sprite.visible = false
+    
+func _process(delta):
+	
 func _physics_process(delta):
+	if animating:
+		pass
 	
 	if player_node == null:
-		player_node = get_node("/root/BaseNode/ShipNode")
+		player_node = get_node("/root/BaseNode/Player")
 		player_dir = (player_node.get_transform().origin - get_transform().origin).normalized()
 		look_at(player_node.get_transform().origin)
 		

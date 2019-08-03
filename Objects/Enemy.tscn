@@ -9,11 +9,12 @@ offsets = PoolRealArray( 0.443709, 0.768212, 1 )
 colors = PoolColorArray( 0.917647, 0.443137, 0.741176, 0.196078, 0.682353, 0.341176, 0.643137, 0.592157, 0.392157, 0.27451, 0.552941, 1 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 9.45121, 13.5365 )
+extents = Vector2( 9.45121, 11.4718 )
 
 [node name="EnemyNode" type="Area2D"]
 collision_layer = 2
 script = ExtResource( 1 )
+is_enemy = null
 
 [node name="Trail" parent="." instance=ExtResource( 2 )]
 width = 4.0
@@ -26,5 +27,6 @@ rotation = 1.57079
 texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( -2.50138, 0.498622 )
 shape = SubResource( 1 )

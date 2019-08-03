@@ -11,7 +11,10 @@ export (float) var acceleration_slow = -10
 export (float) var top_speed = 350
 export (float) var min_speed = 100
 export (float) var rotation_speed = 10.0
+
+export (bool) var use_slowdown = false
 export (float) var slow_factor = 1.1
+export (int) var slowdown_offset = 25
 
 export (String, FILE, "*.tscn") var game_over_scene
 
@@ -53,14 +56,18 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_released("ui_accept"):
 		currentDirection = (currentDirection + 45)
-		length = 0
+		length = 0		
 		
 	if not $Sprite.rotation_degrees == currentDirection:
 		$Sprite.rotation_degrees = lerp($Sprite.rotation_degrees, (360 if currentDirection == 0 else currentDirection), delta*rotation_speed)
 		
-	if Input.is_action_pressed("ui_accept"):
-		current_speed = current_speed + acceleration_slow * slow_factor
-		current_speed = max(current_speed, min_speed)	
+	if use_slowdown:
+		if Input.is_action_pressed("ui_accept"):
+			if length > slowdown_offset:
+				current_speed = current_speed + acceleration_slow * slow_factor
+				current_speed = max(current_speed, min_speed)
+			
+			length = length + 1
 		
 	if currentDirection % 360 == 0:
 			motion = Vector2(0,-current_speed)
@@ -90,4 +97,5 @@ func _physics_process(delta):
 	#move_and_slide(motion)
 	position.x = lerp(position.x, position.x + motion.x, delta)
 	position.y = lerp(position.y, position.y + motion.y, delta)
+	
 	pass

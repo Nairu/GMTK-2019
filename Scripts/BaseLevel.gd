@@ -6,18 +6,37 @@ var timer = null
 export (PackedScene) var enemy = load("res://Objects/Enemy.tscn")
 export (PackedScene) var ui_scene = load("res://Objects/UI.tscn")
 export (PackedScene) var pop_label = load("res://Objects/pop_label.tscn")
+export (PackedScene) var player = load("res://Objects/Player.tscn")
+export (PackedScene) var starfield = load("res://Objects/Starfield.tscn")
+
+export (Vector2) var play_area = Vector2(10000, 10000)
+
+var player_viewable_bounds = Rect2(0, 0, 1, 1)
+
+var screen_size
 
 var project_resolution = Vector2()
 var player_node = null
 var ui_instance = null
+var starfield_instance = null
 var score = 0
 var combo = 1
 var base_points = 100
 
 func _ready():
-	project_resolution = Vector2(ProjectSettings.get_setting("display/window/size/width"),ProjectSettings.get_setting("display/window/size/height"))	
-	player_node = get_node("/root/BaseNode/ShipNode")
+	player_node = player.instance()
 	player_node.connect("enemy_hit", self, "_on_enemy_hit")
+	player_node.position = Vector2(play_area.x / 2, play_area.y / 2)
+	player_node.name = "Player"
+	add_child(player_node)
+	
+	starfield_instance = starfield.instance()
+	starfield_instance.window_size = play_area
+	starfield_instance.position = Vector2(0,0)
+	starfield_instance.star_count = 5000
+	add_child(starfield_instance)
+	
+	screen_size = get_viewport_rect().size
 	
 	ui_instance = ui_scene.instance()
 	$CanvasLayer.add_child(ui_instance)
@@ -31,6 +50,11 @@ func _ready():
 	timer.start()
 
 func _process(delta):
+	player_viewable_bounds = Rect2(player_node.position.x - screen_size.x/2, 
+								   player_node.position.y - screen_size.y/2,
+								   screen_size.x,
+								   screen_size.y)
+	
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 
@@ -47,7 +71,7 @@ func _on_Timer_timeout():
 	var enemy_instance = enemy.instance()
 	enemy_instance.set_name("Enemy")
 	enemy_instance.connect("player_hit", self, "_on_player_hit")
-	var edge = randf();
+	var edge = randf();	
 	
 	var x = 0
 	var y = 0
@@ -55,19 +79,19 @@ func _on_Timer_timeout():
 	# We can use this to choose top, bottom, left and right.
 	if edge < 0.25:
 		# spawn on the left edge somewhere.
-		x = -20
-		y = randi()%int(project_resolution.y)
+		x = player_viewable_bounds.position.x + 20
+		y = player_viewable_bounds.position.y + randi()%int(player_viewable_bounds.size.y)
 	elif edge < 0.5:
 		#spawn on the top edge somewhere
-		x = randi()%int(project_resolution.x)
-		y = -20
+		x = player_viewable_bounds.position.x + randi()%int(player_viewable_bounds.size.x)
+		y = player_viewable_bounds.position.y + 20
 	elif edge < 0.75:
 		#spawn on the right edge somewhere
-		x = project_resolution.x + 20
-		y = randi()%int(project_resolution.y)
+		x = player_viewable_bounds.end.x - 20
+		y = player_viewable_bounds.end.y - randi()%int(player_viewable_bounds.size.y)
 	else:
-		x = randi()%int(project_resolution.x)
-		y = project_resolution.y + 20
+		x = player_viewable_bounds.end.x - randi()%int(player_viewable_bounds.size.x)
+		y = player_viewable_bounds.end.y - 20
 		
 	enemy_instance.position = Vector2(x,y)
 	
