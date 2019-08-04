@@ -1,19 +1,18 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Scripts/Powerup.gd" type="Script" id=1]
-[ext_resource path="res://Sprites/somethiong.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/powerup-shield-1.png" type="Texture" id=3]
-[ext_resource path="res://Sprites/powerup-shield-2.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/powerup-spread-1.png" type="Texture" id=5]
-[ext_resource path="res://Sprites/powerup-spread-2.png" type="Texture" id=6]
-[ext_resource path="res://Sprites/powerup-bomb-1.png" type="Texture" id=7]
-[ext_resource path="res://Sprites/powerup-bomb-2.png" type="Texture" id=8]
-[ext_resource path="res://Sprites/powerup-cross-1.png" type="Texture" id=9]
-[ext_resource path="res://Sprites/powerup-cross-2.png" type="Texture" id=10]
+[ext_resource path="res://Sprites/powerup-shield-1.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/powerup-shield-2.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/powerup-spread-1.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/powerup-spread-2.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/powerup-bomb-1.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/powerup-bomb-2.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/powerup-cross-1.png" type="Texture" id=8]
+[ext_resource path="res://Sprites/powerup-cross-2.png" type="Texture" id=9]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 3 ), ExtResource( 4 ) ],
+"frames": [ ExtResource( 2 ), ExtResource( 3 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 5.0
@@ -21,7 +20,7 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
-"frames": [ ExtResource( 5 ), ExtResource( 6 ) ],
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 8.0
@@ -29,7 +28,7 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ) ],
+"frames": [ ExtResource( 6 ), ExtResource( 7 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 8.0
@@ -37,7 +36,7 @@ animations = [ {
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 9 ), ExtResource( 10 ) ],
+"frames": [ ExtResource( 8 ), ExtResource( 9 ) ],
 "loop": true,
 "name": "Idle",
 "speed": 8.0
@@ -49,11 +48,6 @@ radius = 29.0172
 [node name="Powerup" type="Area2D"]
 collision_layer = 2
 script = ExtResource( 1 )
-
-[node name="Sprite" type="Sprite" parent="."]
-modulate = Color( 1, 1, 1, 0.0980392 )
-scale = Vector2( 10, 10 )
-texture = ExtResource( 2 )
 
 [node name="Powerup-Shield" type="AnimatedSprite" parent="."]
 visible = false

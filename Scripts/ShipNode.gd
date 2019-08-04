@@ -167,7 +167,7 @@ func _on_Timer_timeout():
 		if not bomb_active:
 			# create a BOMB.
 			var bomb_instance = bomb.instance()
-			bomb_instance.set_name("Bullet")
+			bomb_instance.set_name("Bomb")
 			bomb_instance.direction = Vector2(cos(deg2rad(currentDirection-90)), sin(deg2rad(currentDirection-90)))
 			bomb_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
 			bomb_instance.connect("enemy_hit", self, "_on_enemy_hit")
