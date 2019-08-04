@@ -12,23 +12,36 @@ func prepare(powerup):
 	self.powerup = powerup
 	
 	if powerup == Powerup_Type.TRAIL:
+		$"Powerup-Trail".visible = true
+	elif powerup == Powerup_Type.SPREAD:
+		$"Powerup-Spread".visible = true
+	elif powerup == Powerup_Type.BOMB:
+		$"Powerup-Bomb".visible = true
+	elif powerup == Powerup_Type.CROSS:
+		$"Powerup-Cross".visible = true
+	else:
 		pass
-	pass
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	self.connect("area_entered", self, "_on_powerup_body_entered") 
-	#pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if powerup == Powerup_Type.TRAIL:
+		$"Powerup-Trail".play("Idle")
+	elif powerup == Powerup_Type.SPREAD:
+		$"Powerup-Spread".play("Idle")
+	elif powerup == Powerup_Type.BOMB:
+		$"Powerup-Bomb".play("Idle")
+	elif powerup == Powerup_Type.CROSS:
+		$"Powerup-Cross".play("Idle")		
 	current_life += delta
+	
 	if current_life >= life_duration:
 		queue_free()	
-	#pass
 
 func _on_powerup_body_entered(body):	
 	if body.name == "Player":
 		emit_signal("powerup_trail_pickup", powerup)
 		queue_free()
-	pass

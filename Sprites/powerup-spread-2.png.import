@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/weapon-1.png-59b5bc2c8f9cb5eaa2db122479583f00.stex"
+path="res://.import/powerup-spread-2.png-264777c550e666a074918f0c3c1b9b26.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/weapon-1.png"
-dest_files=[ "res://.import/weapon-1.png-59b5bc2c8f9cb5eaa2db122479583f00.stex" ]
+source_file="res://Sprites/powerup-spread-2.png"
+dest_files=[ "res://.import/powerup-spread-2.png-264777c550e666a074918f0c3c1b9b26.stex" ]
 
 [params]
 
