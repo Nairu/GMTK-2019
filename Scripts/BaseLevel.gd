@@ -112,11 +112,11 @@ func _on_enemy_hit(position):
 func _on_timer_enemy_timeout():
 	var enemy_instance
 	
-#	var chance = randf()
-#	if chance < 0.8:
-#		enemy_instance = enemy_flier.instance()
-#	else:
-	enemy_instance = enemy_follower.instance()
+	var chance = randf()
+	if chance < 0.8:
+		enemy_instance = enemy_flier.instance()
+	else:
+		enemy_instance = enemy_follower.instance()
 	
 	enemy_instance.set_name("Enemy")
 	#enemy_instance.connect("player_hit", self, "_on_player_hit")
