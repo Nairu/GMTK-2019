@@ -5,6 +5,9 @@ signal enemy_hit
 enum Weapon_Type { NONE, SINGLE, SPREAD, SHIELD }
 export (Weapon_Type) var weapon_type
 
+export(Shape2D) var base_shape
+export(Shape2D) var shield_shape
+
 export(PackedScene) var bullet = load("res://Objects/Bullet.tscn")
 export(bool) var is_player = true
 export(bool) var was_hit = false
@@ -64,27 +67,33 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 	
 	if self.weapon_type == Weapon_Type.SPREAD:
 		timer.set_wait_time(0.5)
+		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.NONE:
 		timer.set_wait_time(0)
+		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.SHIELD:
-		timer.set_wait_time(0)
-		set_shield()
-		impenetrable_shield = true
-		var scale = $ActiveShield.scale
-		scale *= 2
-		$ShieldCollision.disabled = false
-		$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, scale, 1, Tween.TRANS_SINE, Tween.EASE_IN)
-		$ShieldTween.start()
+		if not impenetrable_shield:
+			timer.set_wait_time(0)
+			set_shield()
+			impenetrable_shield = true
+			var scale = $ActiveShield.scale
+			scale *= 2
+			$CollisionShape2D.shape = shield_shape
+			$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, scale, 1, Tween.TRANS_SINE, Tween.EASE_IN)
+			$ShieldTween.start()
 	else:
 		timer.set_wait_time(0.25)
 
+func turnoff_shield():
+	impenetrable_shield = false
+	$CollisionShape2D.shape = base_shape
+	$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, Vector2(1,1), 1, Tween.TRANS_SINE, Tween.EASE_IN)
+	$ShieldTween.start()
+	set_shield()
+
 func _on_Timer_weapon_timeout():
 	if weapon_type == Weapon_Type.SHIELD:
-		impenetrable_shield = false
-		$ShieldCollision.disabled = true
-		$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, Vector2(1,1), 1, Tween.TRANS_SINE, Tween.EASE_IN)
-		$ShieldTween.start()
-		set_shield()
+		turnoff_shield()
 		
 	change_weapon(Weapon_Type.SINGLE, false)
 
