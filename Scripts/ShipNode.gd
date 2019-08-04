@@ -37,6 +37,9 @@ var timer_bomb_delay = null
 
 var bomb_active = false
 
+var button_delay = .15
+var b_delay = 0
+
 func shake(duration = 0.2, frequency = 15, amplitude = 16, priority = 0):
 	$Camera2D/ScreenShake.start(duration, frequency, amplitude, priority)
 
@@ -111,10 +114,10 @@ func set_bomb_delay():
 	timer_bomb_delay = Timer.new()
 	add_child(timer_bomb_delay)
 	timer_bomb_delay.connect("timeout", self, "_on_bomb_timeout")
-	timer_bomb_delay.set_wait_time(2)
+	timer_bomb_delay.set_wait_time(1)
 	timer_bomb_delay.set_one_shot(false)
 
-func _ready():
+func _ready():	
 	timer = Timer.new()
 	add_child(timer)
 	
@@ -174,20 +177,6 @@ func _on_Timer_timeout():
 				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection))*2, sin(deg2rad(currentDirection))*2)*300
 			bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
 			get_parent().add_child(bullet_instance)
-	elif weapon_type == Weapon_Type.BOMB:
-		if not bomb_active:
-			# create a BOMB.
-			var bomb_instance = bomb.instance()
-			bomb_instance.set_name("Bomb")
-			bomb_instance.direction = Vector2(cos(deg2rad(currentDirection-90)), sin(deg2rad(currentDirection-90)))
-			bomb_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
-			bomb_instance.connect("enemy_hit", self, "_on_enemy_hit")
-			bomb_instance.player_node = self
-			get_parent().add_child(bomb_instance)
-			
-			self.set_bomb_delay()
-			timer_bomb_delay.start();
-			bomb_active = true
 			
 func _on_enemy_hit(position):
 	emit_signal("enemy_hit", position)
@@ -207,15 +196,21 @@ func _process(delta):
 		else:
 			# Soon we will go to the game over screen, but for now just keep it as a restart.
 			get_tree().change_scene(game_over_scene)
-
-var length = 0
-func _physics_process(delta):
 	
-	if Input.is_action_just_released("ui_accept"):
+	b_delay += delta
+	
+	if Input.is_action_just_released("ui_accept") and b_delay >=  button_delay:
+		b_delay = 0
 		currentDirection = (currentDirection + 45)
 		timer.start()
-		_on_Timer_timeout()
+		if weapon_type != Weapon_Type.BOMB:
+			_on_Timer_timeout()
+		else:
+			set_bomb()
 		length = 0		
+
+var length = 0
+func _physics_process(delta):	
 		#117600 - cYCLONE1370
 	if not $Sprite.rotation_degrees == currentDirection:
 		$Sprite.rotation_degrees = lerp($Sprite.rotation_degrees, (360 if currentDirection == 0 else currentDirection), delta*rotation_speed)
@@ -260,6 +255,23 @@ func _physics_process(delta):
 	
 	pass
 
+func set_bomb():
+	if not bomb_active:
+		# create a BOMB.
+		var bomb_instance = bomb.instance()
+		bomb_instance.set_name("Bomb")
+		bomb_instance.direction = Vector2(cos(deg2rad(currentDirection-90)), sin(deg2rad(currentDirection-90)))
+		bomb_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+		bomb_instance.connect("enemy_hit", self, "_on_enemy_hit")
+		bomb_instance.player_node = self
+		get_parent().add_child(bomb_instance)
+		
+		self.set_bomb_delay()
+		timer_bomb_delay.start();
+		bomb_active = true
+
 func _on_bomb_timeout():
-	bomb_active = false
+	print("Boom")
+	if bomb_active:
+		bomb_active = false
 	

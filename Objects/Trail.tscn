@@ -11,8 +11,3 @@ trail_length = 15
 [node name="Trail" type="Line2D" parent="."]
 width = 4.0
 gradient = SubResource( 1 )
-texture_mode = 1937074532
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="TrailHitBox" type="CollisionPolygon2D" parent="StaticBody2D"]
