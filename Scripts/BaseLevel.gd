@@ -7,7 +7,11 @@ const Powerup = preload("res://Scripts/Powerup.gd")
 var timer = null
 var timer_enemy = null
 var timer_asteroid = null
-export (PackedScene) var enemy = load("res://Objects/Enemy.tscn")
+export (PackedScene) var enemy_flier
+export (PackedScene) var enemy_follower
+export (PackedScene) var enemy_circler
+export (PackedScene) var enemy_bomber
+
 export (PackedScene) var asteroid_large = load("res://Objects/AsteroidLarge.tscn")
 export (PackedScene) var asteroid_medium = load("res://Objects/AsteroidMedium.tscn")
 export (PackedScene) var asteroid_small = load("res://Objects/AsteroidSmall.tscn")
@@ -106,7 +110,14 @@ func _on_enemy_hit(position):
 		add_child(powerup)
 
 func _on_timer_enemy_timeout():
-	var enemy_instance = enemy.instance()
+	var enemy_instance
+	
+	var chance = randf()
+	if chance < 0.8:
+		enemy_instance = enemy_flier.instance()
+	else:
+		enemy_instance = enemy_follower.instance()
+	
 	enemy_instance.set_name("Enemy")
 	#enemy_instance.connect("player_hit", self, "_on_player_hit")
 	var edge = randf();	
@@ -180,7 +191,10 @@ func _on_timer_asteroid_timeout():
 func spawn_asteroid_children(size, position):
 	var unit_vector = (player_node.position - position).normalized();
 	#make direction perpendicular.
-	var direction = Vector2(-unit_vector.y, unit_vector.x)
+	var player_direction = player_node.motion.normalized()
+	var angle_difference = player_direction.dot(unit_vector)
+	
+	var direction = Vector2(cos(angle_difference), sin(angle_difference))
 	
 	var asteroid_instance = null
 	if size == 1:
