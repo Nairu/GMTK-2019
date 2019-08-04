@@ -114,7 +114,7 @@ func turnoff_shield():
 	$CollisionShape2D.shape = base_shape
 	$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, Vector2(1,1), 1, Tween.TRANS_SINE, Tween.EASE_IN)
 	$ShieldTween.start()
-	shield_hits = 2
+	Globals.shield = 2
 	$ActiveShield.play("default")
 
 func _on_Timer_weapon_timeout():

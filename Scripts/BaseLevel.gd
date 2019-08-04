@@ -42,6 +42,8 @@ var base_points = 100
 var powerup = null
 
 func _ready():
+	$AudioStreamPlayer.play()
+	
 	player_node = player.instance()
 	#player_node.connect("enemy_hit", self, "_on_enemy_hit")
 	player_node.position = Vector2(play_area.x / 2, play_area.y / 2)
@@ -111,7 +113,7 @@ func _on_enemy_hit(position, reward_player):
 		var perc = randf()
 		var powerup_type = null
 		
-		var likelihood = 0.3
+		var likelihood = 0.5
 		if not player_node.weapon_type == player_node.Weapon_Type.NONE:
 			likelihood = 0.1
 		
