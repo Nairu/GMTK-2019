@@ -41,7 +41,7 @@ animations = [ {
 [node name="ShipNode" type="Area2D"]
 collision_mask = 7
 script = ExtResource( 1 )
-weapon_type = 1
+weapon_type = 4
 bullet = ExtResource( 2 )
 use_slowdown = true
 game_over_scene = "res://Scenes/GameOver.tscn"
