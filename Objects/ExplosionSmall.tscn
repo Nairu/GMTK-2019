@@ -14,25 +14,22 @@
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ],
-"loop": false,
+"loop": true,
 "name": "default",
 "speed": 15.0
 } ]
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 40.3113
+radius = 13.0
 
 [node name="ExplosionBall" type="Area2D"]
-rotation = 4.56927
 script = ExtResource( 1 )
 cosmetic = true
 
 [node name="Explosion" type="AnimatedSprite" parent="."]
-rotation = 0.139626
-scale = Vector2( 2, 2 )
 frames = SubResource( 1 )
-frame = 2
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.285259, 1.97955 )
+position = Vector2( 2, 2 )
 shape = SubResource( 2 )

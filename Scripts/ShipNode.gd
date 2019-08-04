@@ -28,6 +28,9 @@ var current_speed = 100
 var timer = null
 var timer_weapon_turnoff = null
 
+func shake(duration = 0.2, frequency = 15, amplitude = 16, priority = 0):
+	$Camera2D/ScreenShake.start(duration, frequency, amplitude, priority)
+
 func change_weapon(weapon_type, turnoff, turnoff_time=0):
 	self.weapon_type = weapon_type
 	if turnoff:
