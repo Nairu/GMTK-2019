@@ -35,10 +35,6 @@ trail_colour = SubResource( 1 )
 [node name="Wormhole" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "Idle"
-<<<<<<< HEAD
-=======
-frame = 4
->>>>>>> bab55ef783591fd832f671e20adbcf0060c87d2e
 playing = true
 
 [node name="Sprite" type="Sprite" parent="."]
