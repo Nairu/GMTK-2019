@@ -41,7 +41,7 @@ var powerup = null
 
 func _ready():
 	player_node = player.instance()
-	player_node.connect("enemy_hit", self, "_on_enemy_hit")
+	#player_node.connect("enemy_hit", self, "_on_enemy_hit")
 	player_node.position = Vector2(play_area.x / 2, play_area.y / 2)
 	player_node.name = "Player"
 	add_child(player_node)
@@ -82,32 +82,33 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 
-func _on_enemy_hit(position):
-	var label_instance = pop_label.instance()
-	label_instance.position = position
-	label_instance.text = str(base_points * combo)
-	Globals.score = (Globals.score + base_points * combo)
-	combo = combo + 1
-	add_child(label_instance)
-	ui_instance.set_score(Globals.score)
-	
-	var powerup =  powerup_trail.instance()
-	
-	var perc = randf()
-	var powerup_type = null
-	
-	if perc < 1:
-		perc = int(rand_range(0, 2))
+func _on_enemy_hit(position, reward_player):
+	if reward_player:
+		var label_instance = pop_label.instance()
+		label_instance.position = position
+		label_instance.text = str(base_points * combo)
+		Globals.score = (Globals.score + base_points * combo)
+		combo = combo + 1
+		add_child(label_instance)
+		ui_instance.set_score(Globals.score)
 		
-		if perc == 0:
-			powerup_type = powerup.Powerup_Type.SHIELD
-		elif perc == 1:
-			powerup_type = powerup.Powerup_Type.SPREAD
+		var powerup =  powerup_trail.instance()
+		
+		var perc = randf()
+		var powerup_type = null
+		
+		if perc < 1:
+			perc = int(rand_range(0, 2))
 			
-		powerup.prepare(powerup_type)
-		powerup.position = position
-		powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
-		add_child(powerup)
+			if perc == 0:
+				powerup_type = powerup.Powerup_Type.SHIELD
+			elif perc == 1:
+				powerup_type = powerup.Powerup_Type.SPREAD
+				
+			powerup.prepare(powerup_type)
+			powerup.position = position
+			powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
+			add_child(powerup)
 
 func _on_timer_enemy_timeout():
 	var enemy_instance
@@ -145,6 +146,7 @@ func _on_timer_enemy_timeout():
 		y = player_viewable_bounds.end.y - 20
 		
 	enemy_instance.position = Vector2(x,y)
+	enemy_instance.connect("enemy_died", self, "_on_enemy_hit")
 	
 	add_child(enemy_instance)
 	

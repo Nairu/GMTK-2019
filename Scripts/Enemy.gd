@@ -1,6 +1,7 @@
 extends Area2D
 
 signal player_hit
+signal enemy_died
 
 enum Enemy_Type { TRIDENT, FOLLOWER, CIRCLER, BOMBER }
 export(Enemy_Type) var type
@@ -120,7 +121,8 @@ func _move_bomber():
 
 var steering_offset = Vector2(0,0)
 
-func die():
+func die(reward_player=true):
+	dying = true
 	var explosion_instance
 	if type == Enemy_Type.BOMBER:
 		explosion_instance = explosion.instance()
@@ -135,16 +137,25 @@ func die():
 	explosion_instance.position = position
 	explosion_instance.rotation_degrees = randf()*360
 	get_parent().add_child(explosion_instance)
+	emit_signal("enemy_died", position, reward_player)
 	queue_free()
 
+var dying = false
 func _on_Ship_body_entered(body):
+	if dying:
+		return
+		
 	if not body.get("is_player") == null:
 		body.was_hit = true
+		die(true)
 	elif not body.get("is_enemy") == null:
 		# PUSH OURSELVES AWAY
 		var target_pos = (body.position - position).normalized()
-		steering_offset = Vector2(target_pos.x + int(2*randf()-1), -target_pos.y + int(2*randf()-1))
-		
+		steering_offset = Vector2(target_pos.x + int(2*randf()-1), -target_pos.y + int(2*randf()-1))	
+	elif not body.get("is_asteroid") == null:
+		die(false)
+	elif not body.get("is_explosion") == null:
+		die(true)
 		
 func _on_Ship_body_exited(body):
 	if not body.get("is_enemy") == null:
