@@ -26,9 +26,15 @@ var currentDirection = 0
 var current_speed = 100
 
 var timer = null
+var timer_weapon_turnoff = null
 
-func change_weapon(weapon_type):
+func change_weapon(weapon_type, turnoff, turnoff_time=0):
 	self.weapon_type = weapon_type
+	if turnoff:
+		timer_weapon_turnoff.set_wait_time(turnoff_time)
+		timer_weapon_turnoff.set_one_shot(true)
+		timer_weapon_turnoff.start()
+		print ("Changing to: " + str(weapon_type) + " then back to single after: " + str(turnoff_time) + " seconds")
 	
 	if self.weapon_type == Weapon_Type.SPREAD:
 		timer.set_wait_time(0.5)
@@ -36,6 +42,10 @@ func change_weapon(weapon_type):
 		timer.set_wait_time(0)
 	else:
 		timer.set_wait_time(0.25)
+
+func _on_Timer_weapon_timeout():
+	print ("Reset")
+	change_weapon(Weapon_Type.SINGLE, false)
 
 func _ready():
 	
@@ -46,6 +56,10 @@ func _ready():
 	timer.set_wait_time(0.25)
 	timer.set_one_shot(false)
 	timer.start()
+	
+	timer_weapon_turnoff = Timer.new()
+	add_child(timer_weapon_turnoff)
+	timer_weapon_turnoff.connect("timeout", self, "_on_Timer_weapon_timeout")
 
 func _on_Timer_timeout():
 	
@@ -56,12 +70,14 @@ func _on_Timer_timeout():
 		bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)*300
 		bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
 		bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
+		bullet_instance.player_node = self
 		get_parent().add_child(bullet_instance)
 	elif weapon_type == Weapon_Type.SPREAD:
 		for idx in range(3):
 			var bullet_instance = bullet.instance()
 			bullet_instance.set_name("Bullet")
 			bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+			bullet_instance.player_node = self
 						
 			if idx == 0:
 				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-75))*2, sin(deg2rad(currentDirection-75))*2)*300

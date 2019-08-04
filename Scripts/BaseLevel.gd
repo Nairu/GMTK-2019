@@ -93,8 +93,7 @@ func _on_enemy_hit(position):
 	var powerup_type = null
 	
 	if perc < 1:
-		#perc = int(rand_range(0, 2))
-		perc = 1
+		perc = int(rand_range(0, 2))
 		
 		if perc == 0:
 			powerup_type = powerup.Powerup_Type.TRAIL
@@ -179,10 +178,9 @@ func _on_timer_asteroid_timeout():
 	add_child(asteroid_instance)
 	
 func spawn_asteroid_children(size, position):
-	print("Spawning 2 asteroids at: " + str(position))
 	var unit_vector = (player_node.position - position).normalized();
 	#make direction perpendicular.
-	var direction = Vector2(unit_vector.y, -unit_vector.x)
+	var direction = Vector2(-unit_vector.y, unit_vector.x)
 	
 	var asteroid_instance = null
 	if size == 1:
@@ -204,7 +202,7 @@ func spawn_asteroid_children(size, position):
 		asteroid_instance_2 = asteroid_small.instance()
 		
 	asteroid_instance_2.set_name("ROID!")
-	asteroid_instance_2.position = position + direction*-1
+	asteroid_instance_2.position = position + direction*-10
 	asteroid_instance_2.connect("spawn_children", self, "spawn_asteroid_children")
 	add_child(asteroid_instance_2)
 	asteroid_instance_2.direction = direction*-1;
@@ -212,7 +210,7 @@ func spawn_asteroid_children(size, position):
 		
 func _on_powerup_trail_pickup(powerup):
 	if powerup ==  Powerup.Powerup_Type.TRAIL:
-		player_node.change_weapon(player_node.Weapon_Type.SINGLE)
+		player_node.change_weapon(player_node.Weapon_Type.SINGLE, false)
 	elif powerup ==  Powerup.Powerup_Type.SPREAD:
-		player_node.change_weapon(player_node.Weapon_Type.SPREAD)
+		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
 	pass
