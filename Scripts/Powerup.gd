@@ -7,6 +7,7 @@ var powerup = null
 
 export var life_duration = 5
 var current_life = 0
+var player = null
 
 func prepare(powerup):
 	self.powerup = powerup
@@ -28,6 +29,14 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
+	$Sprite.rotation_degrees += 3
+	   
+	if position.distance_to(player.position) < 150:
+		var direction = (player.get_transform().origin - get_transform().origin).normalized()
+		position.x = lerp(position.x, position.x + (direction.x * 400), delta)
+		position.y = lerp(position.y, position.y + (direction.y * 400), delta)
+	
 	if powerup == Powerup_Type.SHIELD:
 		$"Powerup-Shield".play("Idle")
 	elif powerup == Powerup_Type.SPREAD:

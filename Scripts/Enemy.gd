@@ -1,12 +1,14 @@
 extends Area2D
 
 signal player_hit
+signal enemy_died
 
 enum Enemy_Type { TRIDENT, FOLLOWER, CIRCLER, BOMBER }
 export(Enemy_Type) var type
 
 export(bool) var is_enemy = true
-
+export(PackedScene) var explosion_small
+export(PackedScene) var explosion
 
 var player_node = null
 var player_dir = Vector2()
@@ -55,6 +57,8 @@ func _physics_process(delta):
 		movement = _move_trident()
 	elif type == Enemy_Type.FOLLOWER:
 		movement = _move_follower()
+	elif type == Enemy_Type.BOMBER:
+		movement = _move_bomber()
 	
 	direction = movement[0]
 	speed = movement[1]
@@ -86,17 +90,72 @@ func _move_follower():
 	player_dir = Vector2(cos(rotation), sin(rotation))
 	
 	return [player_dir + steering_offset, 200]
+	
+var last_direction = null
+func _move_bomber():
+	var distance = get_transform().origin.distance_to(player_node.get_transform().origin)
+	var dir = (player_node.get_transform().origin - get_transform().origin).normalized()
+	
+	if distance < 75:
+		var explosion_instance = explosion.instance()
+		explosion_instance.cosmetic = false
+		explosion_instance.position = position
+		explosion_instance.rotation_degrees = randf()*360
+		get_parent().add_child(explosion_instance)		
+		queue_free()
+		return [Vector2(0,0), 0]
+		
+	elif distance < 250:
+		last_direction = null
+		$Trail2.visible = true
+		$Trail3.visible = true
+		var movement = _move_follower()
+		movement[1] = 250
+		return movement
+	else:
+		$Trail2.visible = false
+		$Trail3.visible = false
+		if last_direction == null:
+			last_direction = _move_follower()[0]
+		return [last_direction, 150]
 
 var steering_offset = Vector2(0,0)
 
+func die(reward_player=true):
+	dying = true
+	var explosion_instance
+	if type == Enemy_Type.BOMBER:
+		explosion_instance = explosion.instance()
+		if not player_node == null:
+			player_node.shake(0.3,15,20,1)
+	else:
+		explosion_instance = explosion_small.instance()
+		if not player_node == null:
+			player_node.shake()
+		
+	explosion_instance.cosmetic = true
+	explosion_instance.position = position
+	explosion_instance.rotation_degrees = randf()*360
+	get_parent().add_child(explosion_instance)
+	emit_signal("enemy_died", position, reward_player)
+	queue_free()
+
+var dying = false
 func _on_Ship_body_entered(body):
+	if dying:
+		return
+		
 	if not body.get("is_player") == null:
 		body.was_hit = true
+		die(true)
 	elif not body.get("is_enemy") == null:
 		# PUSH OURSELVES AWAY
 		var target_pos = (body.position - position).normalized()
-		steering_offset = Vector2(target_pos.x + int(2*randf()-1), -target_pos.y + int(2*randf()-1))
-		
+		steering_offset = Vector2(target_pos.x + int(2*randf()-1), -target_pos.y + int(2*randf()-1))	
+	elif not body.get("is_asteroid") == null:
+		die(false)
+	elif not body.get("is_explosion") == null:
+		die(true)
 		
 func _on_Ship_body_exited(body):
 	if not body.get("is_enemy") == null:

@@ -41,7 +41,7 @@ var powerup = null
 
 func _ready():
 	player_node = player.instance()
-	player_node.connect("enemy_hit", self, "_on_enemy_hit")
+	#player_node.connect("enemy_hit", self, "_on_enemy_hit")
 	player_node.position = Vector2(play_area.x / 2, play_area.y / 2)
 	player_node.name = "Player"
 	add_child(player_node)
@@ -107,8 +107,9 @@ func _on_enemy_hit(position):
 			powerup_type = powerup.Powerup_Type.CROSS
 		elif perc == 3:
 			powerup_type = powerup.Powerup_Type.BOMB
-			
+				
 		powerup.prepare(powerup_type)
+		powerup.player = player_node
 		powerup.position = position
 		powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
 		add_child(powerup)
@@ -117,10 +118,12 @@ func _on_timer_enemy_timeout():
 	var enemy_instance
 	
 	var chance = randf()
-	if chance < 0.8:
-		enemy_instance = enemy_flier.instance()
-	else:
+	if chance < 0.1:
+		enemy_instance = enemy_bomber.instance()
+	elif chance < 0.3:
 		enemy_instance = enemy_follower.instance()
+	else:
+		enemy_instance = enemy_flier.instance()
 	
 	enemy_instance.set_name("Enemy")
 	#enemy_instance.connect("player_hit", self, "_on_player_hit")
@@ -147,6 +150,7 @@ func _on_timer_enemy_timeout():
 		y = player_viewable_bounds.end.y - 20
 		
 	enemy_instance.position = Vector2(x,y)
+	enemy_instance.connect("enemy_died", self, "_on_enemy_hit")
 	
 	add_child(enemy_instance)
 	
@@ -233,4 +237,6 @@ func _on_powerup_pickup(powerup):
 		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 5)
 	elif powerup ==  Powerup.Powerup_Type.BOMB:
 		player_node.change_weapon(player_node.Weapon_Type.BOMB, true, 5)
+	elif powerup == Powerup.Powerup_Type.SHIELD:
+		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 10)
 	pass

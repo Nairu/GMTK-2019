@@ -40,3 +40,5 @@ func _on_Asteroid_body_entered(body):
 	if (not body.get("is_player") == null):
 		#emit_signal("player_hit")
 		body.was_hit = true
+	elif (not body.get("is_enemy") == null):
+		body.die(false)
