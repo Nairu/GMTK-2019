@@ -164,7 +164,9 @@ func _on_timer_asteroid_timeout():
 	
 func spawn_asteroid_children(size, position):
 	print("Spawning 2 asteroids at: " + str(position))
-	var direction = Vector2(randf()*2-1, randf()*2-1)
+	var unit_vector = (player_node.position - position).normalized();
+	#make direction perpendicular.
+	var direction = Vector2(unit_vector.y, -unit_vector.x)
 	
 	var asteroid_instance = null
 	if size == 1:
@@ -173,7 +175,7 @@ func spawn_asteroid_children(size, position):
 		asteroid_instance = asteroid_small.instance()
 	
 	asteroid_instance.set_name("ROID!")
-	asteroid_instance.position = position + direction
+	asteroid_instance.position = position + direction*10
 	asteroid_instance.connect("spawn_children", self, "spawn_asteroid_children")
 	add_child(asteroid_instance)
 	asteroid_instance.direction = direction;
