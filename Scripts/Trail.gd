@@ -12,7 +12,7 @@ func _ready():
 	
 	$Trail.gradient = trail_colour
 	
-	self.connect("area_entered", self, "_on_trail_entered")
+	#self.connect("area_entered", self, "_on_trail_entered")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -59,6 +59,8 @@ func _physics_process(delta):
 		movement = _move_follower()
 	elif type == Enemy_Type.BOMBER:
 		movement = _move_bomber()
+	elif type == Enemy_Type.CIRCLER:
+		movement = _move_circler(delta)
 	
 	direction = movement[0]
 	speed = movement[1]
@@ -118,6 +120,25 @@ func _move_bomber():
 		if last_direction == null:
 			last_direction = _move_follower()[0]
 		return [last_direction, 150]
+
+var frames_out = 10
+var _angle = 0
+var _centre
+var _offset_amount = 0
+var _final_offset_amount = 100
+func _move_circler(delta):
+	
+	if _centre == null:
+		_centre = position
+	
+	_angle += 5 * delta
+	$Sprite.rotation = -((PI/2)+_angle)
+
+	var offset = Vector2(sin(_angle), cos(_angle)) * _offset_amount
+	var pos = _centre + offset
+	position = pos
+	_offset_amount = min(_offset_amount + 1, _final_offset_amount)
+	return [Vector2(0,0), 0]
 
 var steering_offset = Vector2(0,0)
 

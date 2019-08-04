@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Scripts/ShipNode.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Bullet.tscn" type="PackedScene" id=2]
@@ -15,6 +15,8 @@
 [ext_resource path="res://Sprites/shield-removal-5.png" type="Texture" id=13]
 [ext_resource path="res://Sprites/shield-removal-6.png" type="Texture" id=14]
 [ext_resource path="res://Sprites/shield-removal-7.png" type="Texture" id=15]
+[ext_resource path="res://Sound Effects/Laser_Shoot2.wav" type="AudioStream" id=16]
+[ext_resource path="res://Sound Effects/Powerup2.wav" type="AudioStream" id=17]
 
 [sub_resource type="CapsuleShape2D" id=7]
 radius = 4.0
@@ -48,6 +50,7 @@ animations = [ {
 [node name="ShipNode" type="Area2D"]
 collision_mask = 7
 script = ExtResource( 1 )
+weapon_type = 1
 base_shape = SubResource( 7 )
 shield_shape = SubResource( 6 )
 bullet = ExtResource( 2 )
@@ -73,6 +76,7 @@ drag_margin_right = 0.5
 drag_margin_bottom = 0.5
 
 [node name="ScreenShake" parent="Camera2D" instance=ExtResource( 5 )]
+amplitude = 15.0
 
 [node name="ActiveShield" type="AnimatedSprite" parent="."]
 frames = SubResource( 3 )
@@ -85,3 +89,9 @@ frames = SubResource( 4 )
 
 [node name="ShieldTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="GunShotSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+
+[node name="PowerupSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 17 )

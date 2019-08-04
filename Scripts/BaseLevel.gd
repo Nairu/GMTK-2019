@@ -7,6 +7,8 @@ const Powerup = preload("res://Scripts/Powerup.gd")
 var timer = null
 var timer_enemy = null
 var timer_asteroid = null
+var timer_difficulty = null
+
 export (PackedScene) var enemy_flier
 export (PackedScene) var enemy_follower
 export (PackedScene) var enemy_circler
@@ -61,7 +63,7 @@ func _ready():
 	add_child(timer_enemy)
 	
 	timer_enemy.connect("timeout", self, "_on_timer_enemy_timeout")
-	timer_enemy.set_wait_time(2.0)
+	timer_enemy.set_wait_time(3)
 	timer_enemy.set_one_shot(false)
 	timer_enemy.start()
 	
@@ -72,6 +74,19 @@ func _ready():
 	timer_asteroid.set_wait_time(5.0)
 	timer_asteroid.set_one_shot(false)
 	timer_asteroid.start()
+	
+	timer_difficulty = Timer.new()
+	add_child(timer_difficulty)
+	
+	timer_difficulty.connect("timeout", self, "_on_timer_difficulty_changed")
+	timer_difficulty.set_wait_time(10.0)
+	timer_difficulty.set_one_shot(false)
+	timer_difficulty.start()
+
+func _on_timer_difficulty_changed():
+	var time = max(timer_enemy.wait_time-0.2, 0.3)
+	timer_enemy.set_wait_time(time)
+	timer_enemy.start()
 
 func _process(delta):
 	player_viewable_bounds = Rect2(player_node.position.x - screen_size.x/2, 
@@ -97,8 +112,12 @@ func _on_enemy_hit(position, reward_player):
 		var perc = randf()
 		var powerup_type = null
 		
-		if perc <= 1:
-			perc = int(rand_range(0, 4))
+		var likelihood = 0.3
+		if not player_node.weapon_type == player_node.Weapon_Type.NONE:
+			likelihood = 0.1
+		
+		if perc < likelihood:
+			perc = int(rand_range(0, 3))
 			
 			if perc == 0:
 				powerup_type = powerup.Powerup_Type.SHIELD
@@ -117,18 +136,20 @@ func _on_enemy_hit(position, reward_player):
 
 func _on_timer_enemy_timeout():
 	var enemy_instance
-	
+
 	var chance = randf()
 	if chance < 0.1:
 		enemy_instance = enemy_bomber.instance()
 	elif chance < 0.3:
 		enemy_instance = enemy_follower.instance()
+	elif chance < 0.6:
+		enemy_instance = enemy_circler.instance()
 	else:
 		enemy_instance = enemy_flier.instance()
 	
 	enemy_instance.set_name("Enemy")
 	#enemy_instance.connect("player_hit", self, "_on_player_hit")
-	var edge = randf();	
+	var edge = randf();
 	
 	var x = 0
 	var y = 0
@@ -233,11 +254,11 @@ func spawn_asteroid_children(size, position):
 		
 func _on_powerup_pickup(powerup):
 	if powerup ==  Powerup.Powerup_Type.SPREAD:
-		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
+		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 2)
 	elif powerup ==  Powerup.Powerup_Type.CROSS:
-		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 5)
+		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 8)
 	elif powerup ==  Powerup.Powerup_Type.BOMB:
 		player_node.change_weapon(player_node.Weapon_Type.BOMB, true, 5)
 	elif powerup == Powerup.Powerup_Type.SHIELD:
-		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 10)
+		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 5)
 	pass
