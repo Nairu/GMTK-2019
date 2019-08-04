@@ -96,13 +96,13 @@ func _on_enemy_hit(position):
 		perc = int(rand_range(0, 2))
 		
 		if perc == 0:
-			powerup_type = powerup.Powerup_Type.TRAIL
+			powerup_type = powerup.Powerup_Type.SHIELD
 		elif perc == 1:
 			powerup_type = powerup.Powerup_Type.SPREAD
 			
 		powerup.prepare(powerup_type)
 		powerup.position = position
-		powerup.connect("powerup_trail_pickup", self, "_on_powerup_trail_pickup")
+		powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
 		add_child(powerup)
 
 func _on_timer_enemy_timeout():
@@ -208,9 +208,9 @@ func spawn_asteroid_children(size, position):
 	asteroid_instance_2.direction = direction*-1;
 	asteroid_instance.asteroid_size = size
 		
-func _on_powerup_trail_pickup(powerup):
-	if powerup ==  Powerup.Powerup_Type.TRAIL:
-		player_node.change_weapon(player_node.Weapon_Type.SINGLE, false)
+func _on_powerup_pickup(powerup):
+	if powerup ==  Powerup.Powerup_Type.SHIELD:
+		player_node.change_weapon(player_node.Weapon_Type.SHIELD, false)
 	elif powerup ==  Powerup.Powerup_Type.SPREAD:
 		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
 	pass

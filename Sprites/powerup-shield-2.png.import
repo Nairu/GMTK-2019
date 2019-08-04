@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/powerup-trail-1.png-2d445257dc7d0d384b1ea12653413589.stex"
+path="res://.import/powerup-shield-2.png-5ce7b1e3691727ee6949896f89e48438.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/powerup-trail-1.png"
-dest_files=[ "res://.import/powerup-trail-1.png-2d445257dc7d0d384b1ea12653413589.stex" ]
+source_file="res://Sprites/powerup-shield-2.png"
+dest_files=[ "res://.import/powerup-shield-2.png-5ce7b1e3691727ee6949896f89e48438.stex" ]
 
 [params]
 

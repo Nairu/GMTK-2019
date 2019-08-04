@@ -1,8 +1,8 @@
 extends Node2D
 
-signal powerup_trail_pickup
+signal powerup_pickup
 
-enum Powerup_Type { TRAIL, SPREAD, BOMB, CROSS }
+enum Powerup_Type { SHIELD, SPREAD, BOMB, CROSS }
 var powerup = null
 
 export var life_duration = 5
@@ -11,8 +11,8 @@ var current_life = 0
 func prepare(powerup):
 	self.powerup = powerup
 	
-	if powerup == Powerup_Type.TRAIL:
-		$"Powerup-Trail".visible = true
+	if powerup == Powerup_Type.SHIELD:
+		$"Powerup-Shield".visible = true
 	elif powerup == Powerup_Type.SPREAD:
 		$"Powerup-Spread".visible = true
 	elif powerup == Powerup_Type.BOMB:
@@ -28,8 +28,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if powerup == Powerup_Type.TRAIL:
-		$"Powerup-Trail".play("Idle")
+	if powerup == Powerup_Type.SHIELD:
+		$"Powerup-Shield".play("Idle")
 	elif powerup == Powerup_Type.SPREAD:
 		$"Powerup-Spread".play("Idle")
 	elif powerup == Powerup_Type.BOMB:
@@ -43,5 +43,5 @@ func _process(delta):
 
 func _on_powerup_body_entered(body):	
 	if body.name == "Player":
-		emit_signal("powerup_trail_pickup", powerup)
+		emit_signal("powerup_pickup", powerup)
 		queue_free()
