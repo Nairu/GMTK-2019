@@ -21,7 +21,7 @@ export (int) var slowdown_offset = 25
 
 export (String, FILE, "*.tscn") var game_over_scene
 
-var motion = Vector2()
+export (Vector2) var motion = Vector2()
 var currentDirection = 0
 var current_speed = 100
 
@@ -34,7 +34,6 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 		timer_weapon_turnoff.set_wait_time(turnoff_time)
 		timer_weapon_turnoff.set_one_shot(true)
 		timer_weapon_turnoff.start()
-		print ("Changing to: " + str(weapon_type) + " then back to single after: " + str(turnoff_time) + " seconds")
 	
 	if self.weapon_type == Weapon_Type.SPREAD:
 		timer.set_wait_time(0.5)
@@ -44,7 +43,6 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 		timer.set_wait_time(0.25)
 
 func _on_Timer_weapon_timeout():
-	print ("Reset")
 	change_weapon(Weapon_Type.SINGLE, false)
 
 func _ready():

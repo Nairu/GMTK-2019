@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Trail.tscn" type="PackedScene" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://Sprites/wormhole-3.png" type="Texture" id=5]
 [ext_resource path="res://Sprites/wormhole-4.png" type="Texture" id=6]
 [ext_resource path="res://Sprites/wormhole-5.png" type="Texture" id=7]
-[ext_resource path="res://Sprites/enemy-ship.png" type="Texture" id=8]
+[ext_resource path="res://Sprites/enemy-ship-3.png" type="Texture" id=8]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.811321, 1 )
@@ -21,12 +21,11 @@ animations = [ {
 "speed": 6.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 8.49108, 10.5579 )
-
 [node name="EnemyNode" type="Area2D"]
 collision_layer = 2
+collision_mask = 3
 script = ExtResource( 1 )
+type = 1
 
 [node name="Trail" parent="." instance=ExtResource( 2 )]
 targetPath = NodePath("..")
@@ -35,15 +34,15 @@ trail_colour = SubResource( 1 )
 [node name="Wormhole" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "Idle"
-frame = 4
+frame = 2
 playing = true
 
 [node name="Sprite" type="Sprite" parent="."]
 visible = false
+position = Vector2( 0.492016, 0 )
 rotation = 1.57079
 texture = ExtResource( 8 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 visible = false
-position = Vector2( -2.50138, 0.498622 )
-shape = SubResource( 3 )
+polygon = PoolVector2Array( 9, 2, 9, -2, 8, -2, 8, -3, 7, -3, 7, -4, 4, -4, -3, -11, -7, -11, -7, -10, -9, -10, -9, -9, -2, -4, -2, -2, -4, -1, -4, 1, -2, 2, -2, 4, -9, 9, -9, 10, -7, 10, -7, 11, -3, 11, 4, 4, 7, 4, 7, 3, 8, 3, 8, 2 )
