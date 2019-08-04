@@ -93,7 +93,7 @@ func _on_enemy_hit(position):
 func _on_timer_enemy_timeout():
 	var enemy_instance = enemy.instance()
 	enemy_instance.set_name("Enemy")
-	enemy_instance.connect("player_hit", self, "_on_player_hit")
+	#enemy_instance.connect("player_hit", self, "_on_player_hit")
 	var edge = randf();	
 	
 	var x = 0
