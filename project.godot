@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="GMTK-2019"
-run/main_scene="res://Scenes/OpeningLevel.tscn"
+run/main_scene="res://Scenes/BaseLevel.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -53,5 +53,5 @@ texture={
 
 [rendering]
 
-environment/default_clear_color=Color( 0.0823529, 0.0901961, 0.12549, 1 )
+environment/default_clear_color=Color( 0.12549, 0.141176, 0.219608, 1 )
 environment/default_environment="res://default_env.tres"

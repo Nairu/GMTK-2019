@@ -53,7 +53,6 @@ func _physics_process(delta):
 
 func _on_Ship_body_entered(body):
 	if (not body.get("is_player") == null):
-		emit_signal("player_hit")
 		body.was_hit = true
 
 #func _process(delta):

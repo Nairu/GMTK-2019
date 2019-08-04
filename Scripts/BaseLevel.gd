@@ -2,6 +2,9 @@ extends Node2D
 
 signal player_was_hit
 
+const Powerup = preload("res://Scripts/Powerup.gd")
+
+var timer = null
 var timer_enemy = null
 var timer_asteroid = null
 export (PackedScene) var enemy = load("res://Objects/Enemy.tscn")
@@ -14,7 +17,7 @@ export (PackedScene) var pop_label = load("res://Objects/pop_label.tscn")
 export (PackedScene) var player = load("res://Objects/Player.tscn")
 export (PackedScene) var starfield = load("res://Objects/Starfield.tscn")
 
-export (PackedScene) var powerup_trail = load("res://Objects/Powerups/Powerup-Trail.tscn")
+export (PackedScene) var powerup_trail = load("res://Objects/Powerups/Powerup.tscn")
 
 export (Vector2) var play_area = Vector2(10000, 10000)
 
@@ -85,10 +88,22 @@ func _on_enemy_hit(position):
 	ui_instance.set_score(Globals.score)
 	
 	var powerup =  powerup_trail.instance()
-	powerup.prepare(powerup.Powerup_Type.TRAIL)
-	powerup.position = position
-	powerup.connect("powerup_trail_pickup", self, "_on_powerup_trail_pickup")
-	add_child(powerup)
+	
+	var perc = randf()
+	var powerup_type = null
+	
+	if perc < .2:
+		perc = int(rand_range(0, 2))
+		
+		if perc == 0:
+			powerup_type = powerup.Powerup_Type.TRAIL
+		elif perc == 1:
+			powerup_type = powerup.Powerup_Type.SPREAD
+			
+		powerup.prepare(powerup_type)
+		powerup.position = position
+		powerup.connect("powerup_trail_pickup", self, "_on_powerup_trail_pickup")
+		add_child(powerup)
 
 func _on_timer_enemy_timeout():
 	var enemy_instance = enemy.instance()
@@ -195,4 +210,8 @@ func spawn_asteroid_children(size, position):
 	asteroid_instance.asteroid_size = size
 		
 func _on_powerup_trail_pickup(powerup):
-	print(powerup)
+	if powerup ==  Powerup.Powerup_Type.TRAIL:
+		player_node.change_weapon(player_node.Weapon_Type.SINGLE)
+	elif powerup ==  Powerup.Powerup_Type.SPREAD:
+		player_node.change_weapon(player_node.Weapon_Type.SPREAD)
+	pass

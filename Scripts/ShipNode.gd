@@ -2,6 +2,9 @@ extends Area2D
 
 signal enemy_hit
 
+enum Weapon_Type { NONE, SINGLE, SPREAD }
+export (Weapon_Type) var weapon_type
+
 export(PackedScene) var bullet = load("res://Objects/Bullet.tscn")
 export(bool) var is_player = true
 export(bool) var was_hit = false
@@ -24,6 +27,16 @@ var current_speed = 100
 
 var timer = null
 
+func change_weapon(weapon_type):
+	self.weapon_type = weapon_type
+	
+	if self.weapon_type == Weapon_Type.SPREAD:
+		timer.set_wait_time(0.5)
+	elif self.weapon_type == Weapon_Type.NONE:
+		timer.set_wait_time(0)
+	else:
+		timer.set_wait_time(0.25)
+
 func _ready():
 	
 	timer = Timer.new()
@@ -35,13 +48,30 @@ func _ready():
 	timer.start()
 
 func _on_Timer_timeout():
-	# create a bullet.
-	var bullet_instance = bullet.instance()
-	bullet_instance.set_name("Bullet")
-	bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)*300
-	bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
-	bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
-	get_parent().add_child(bullet_instance)
+	
+	if weapon_type == Weapon_Type.SINGLE:	
+		# create a bullet.
+		var bullet_instance = bullet.instance()
+		bullet_instance.set_name("Bullet")
+		bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)*300
+		bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+		bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
+		get_parent().add_child(bullet_instance)
+	elif weapon_type == Weapon_Type.SPREAD:
+		for idx in range(3):
+			var bullet_instance = bullet.instance()
+			bullet_instance.set_name("Bullet")
+			bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+						
+			if idx == 0:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-75))*2, sin(deg2rad(currentDirection-75))*2)*300
+			elif idx == 1:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)*300
+			elif idx == 2:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-105))*2, sin(deg2rad(currentDirection-105))*2)*300
+			bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
+			get_parent().add_child(bullet_instance)
+		pass
 
 func _on_enemy_hit(position):
 	emit_signal("enemy_hit", position)
@@ -62,7 +92,7 @@ func _physics_process(delta):
 		#117600 - cYCLONE1370
 	if not $Sprite.rotation_degrees == currentDirection:
 		$Sprite.rotation_degrees = lerp($Sprite.rotation_degrees, (360 if currentDirection == 0 else currentDirection), delta*rotation_speed)
-		$CollisionPolygon2D.rotation_degrees = currentDirection
+		$CollisionShape2D.rotation_degrees = currentDirection
 		
 	if use_slowdown:
 		if Input.is_action_pressed("ui_accept"):
