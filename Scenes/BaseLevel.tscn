@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/BaseLevel.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Enemies/Enemy_Flier.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Objects/Enemies/Enemy_Follower.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Objects/Enemies/Enemy_Bomber.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Objects/AsteroidLarge.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Objects/AsteroidMedium.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Objects/AsteroidSmall.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Objects/Powerups/Powerup.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Objects/Starfield.tscn" type="PackedScene" id=9]
 
 [node name="BaseNode" type="Node2D"]
 position = Vector2( 11, 2 )
@@ -12,8 +16,12 @@ script = ExtResource( 1 )
 enemy_flier = ExtResource( 2 )
 enemy_follower = ExtResource( 3 )
 enemy_bomber = ExtResource( 4 )
+asteroid_large = ExtResource( 5 )
+asteroid_medium = ExtResource( 6 )
+asteroid_small = ExtResource( 7 )
+powerup_trail = ExtResource( 8 )
 
-[node name="Starfield" parent="." instance=ExtResource( 5 )]
+[node name="Starfield" parent="." instance=ExtResource( 9 )]
 position = Vector2( -680, -593 )
 star_count = 2000
 window_size = Vector2( 2000, 2000 )

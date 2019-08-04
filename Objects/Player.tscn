@@ -1,23 +1,20 @@
-<<<<<<< HEAD
 [gd_scene load_steps=22 format=2]
-=======
-[gd_scene load_steps=19 format=2]
->>>>>>> 241e25a2191a92dc0fda4399b346497427d75d5b
 
 [ext_resource path="res://Scripts/ShipNode.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Bullet.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Objects/Trail.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Sprites/player-ship.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/shield-1.png" type="Texture" id=5]
-[ext_resource path="res://Sprites/shield-2.png" type="Texture" id=6]
-[ext_resource path="res://Sprites/shield-3.png" type="Texture" id=7]
-[ext_resource path="res://Sprites/shield-removal-1.png" type="Texture" id=8]
-[ext_resource path="res://Sprites/shield-removal-2.png" type="Texture" id=9]
-[ext_resource path="res://Sprites/shield-removal-3.png" type="Texture" id=10]
-[ext_resource path="res://Sprites/shield-removal-4.png" type="Texture" id=11]
-[ext_resource path="res://Sprites/shield-removal-5.png" type="Texture" id=12]
-[ext_resource path="res://Sprites/shield-removal-6.png" type="Texture" id=13]
-[ext_resource path="res://Sprites/shield-removal-7.png" type="Texture" id=14]
+[ext_resource path="res://Objects/ScreenShake.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Sprites/shield-1.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/shield-2.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/shield-3.png" type="Texture" id=8]
+[ext_resource path="res://Sprites/shield-removal-1.png" type="Texture" id=9]
+[ext_resource path="res://Sprites/shield-removal-2.png" type="Texture" id=10]
+[ext_resource path="res://Sprites/shield-removal-3.png" type="Texture" id=11]
+[ext_resource path="res://Sprites/shield-removal-4.png" type="Texture" id=12]
+[ext_resource path="res://Sprites/shield-removal-5.png" type="Texture" id=13]
+[ext_resource path="res://Sprites/shield-removal-6.png" type="Texture" id=14]
+[ext_resource path="res://Sprites/shield-removal-7.png" type="Texture" id=15]
 
 [sub_resource type="CapsuleShape2D" id=7]
 radius = 4.0
@@ -34,18 +31,18 @@ radius = 4.0
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ],
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
 "loop": true,
-"name": "Idle",
+"name": "default",
 "speed": 8.0
 } ]
 
 [sub_resource type="SpriteFrames" id=4]
 animations = [ {
-"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ) ],
 "loop": false,
-"name": "Idle",
-"speed": 8.0
+"name": "default",
+"speed": 6.0
 } ]
 
 [node name="ShipNode" type="Area2D"]
@@ -53,7 +50,6 @@ collision_mask = 7
 script = ExtResource( 1 )
 base_shape = SubResource( 7 )
 shield_shape = SubResource( 6 )
-weapon_type = 4
 bullet = ExtResource( 2 )
 use_slowdown = true
 game_over_scene = "res://Scenes/GameOver.tscn"
@@ -76,10 +72,10 @@ drag_margin_top = 0.5
 drag_margin_right = 0.5
 drag_margin_bottom = 0.5
 
+[node name="ScreenShake" parent="Camera2D" instance=ExtResource( 5 )]
+
 [node name="ActiveShield" type="AnimatedSprite" parent="."]
 frames = SubResource( 3 )
-animation = "Idle"
-frame = 1
 
 [node name="DeactiveShield" type="AnimatedSprite" parent="."]
 visible = false
@@ -89,6 +85,3 @@ frames = SubResource( 4 )
 
 [node name="ShieldTimer" type="Timer" parent="."]
 one_shot = true
-animation = "Idle"
-frame = 6
-playing = true
