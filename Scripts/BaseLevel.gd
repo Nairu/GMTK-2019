@@ -90,7 +90,6 @@ func _on_enemy_hit(position, reward_player):
 		Globals.score = (Globals.score + base_points * combo)
 		combo = combo + 1
 		add_child(label_instance)
-		ui_instance.set_score(Globals.score)
 		
 		var powerup =  powerup_trail.instance()
 		
