@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/ShipNode.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Bullet.tscn" type="PackedScene" id=2]
@@ -6,31 +6,27 @@
 [ext_resource path="res://Sprites/player-ship.png" type="Texture" id=4]
 
 [sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 0, 0.811321, 1 )
-colors = PoolColorArray( 0.572549, 0.956863, 1, 0.196078, 0.258824, 0.792157, 0.992157, 0.588235, 0, 0.490196, 0.780392, 1 )
-
-[sub_resource type="CapsuleShape2D" id=2]
-radius = 4.0
+offsets = PoolRealArray( 0, 0.695364, 1 )
+colors = PoolColorArray( 0.572549, 0.956863, 1, 0.203922, 0.258824, 0.792157, 0.992157, 0.584314, 0, 0.490196, 0.780392, 1 )
 
 [node name="ShipNode" type="Area2D"]
-collision_mask = 7
+collision_mask = 6
 script = ExtResource( 1 )
-weapon_type = 1
 bullet = ExtResource( 2 )
 use_slowdown = true
 game_over_scene = "res://Scenes/GameOver.tscn"
 
 [node name="Trail" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, 12 )
-targetPath = NodePath("..")
-trail_colour = SubResource( 1 )
+width = 4.0
+default_color = Color( 0.4, 0.501961, 1, 1 )
+gradient = SubResource( 1 )
+texture_mode = -268433572
+targetPath = NodePath("../CollisionPolygon2D")
+trail_length = 20
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -38,3 +34,6 @@ drag_margin_left = 0.5
 drag_margin_top = 0.5
 drag_margin_right = 0.5
 drag_margin_bottom = 0.5
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -1, -12, 0, -13, 1, -12, 2, -11, 3, -7, 2, -1, 3, 1, 7, 2, 11, 6, 11, 12, 10, 12, 5, 6, 2, 13, -2, 13, -5, 6, -10, 12, -11, 12, -11, 6, -7, 2, -3, 1, -2, -1, -3, -7, -2, -11 )

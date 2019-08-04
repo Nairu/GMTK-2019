@@ -92,8 +92,9 @@ func _on_enemy_hit(position):
 	var perc = randf()
 	var powerup_type = null
 	
-	if perc < .2:
-		perc = int(rand_range(0, 2))
+	if perc < 1:
+		#perc = int(rand_range(0, 2))
+		perc = 1
 		
 		if perc == 0:
 			powerup_type = powerup.Powerup_Type.TRAIL
