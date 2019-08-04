@@ -117,7 +117,7 @@ func _on_enemy_hit(position, reward_player):
 			likelihood = 0.1
 		
 		if perc < likelihood:
-			perc = int(rand_range(0, 3))
+			perc = int(rand_range(0, 4))
 			
 			if perc == 0:
 				powerup_type = powerup.Powerup_Type.SHIELD

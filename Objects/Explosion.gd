@@ -1,7 +1,7 @@
 extends Area2D
 
 export(bool) var cosmetic = false
-export(bool) var is_asteroid = true
+export(bool) var is_explosion = true
 
 func _ready():
 	connect("area_entered", self, "_on_Explosion_entered")
