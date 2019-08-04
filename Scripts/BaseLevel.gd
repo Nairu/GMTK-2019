@@ -76,40 +76,43 @@ func _ready():
 func _process(delta):
 	player_viewable_bounds = Rect2(player_node.position.x - screen_size.x/2, 
 								   player_node.position.y - screen_size.y/2,
-								   screen_size.x,
-								   screen_size.y)
+								   screen_size.x * 2,
+								   screen_size.y * 2)
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 
-func _on_enemy_hit(position, reward_player):
-	if reward_player:
-		var label_instance = pop_label.instance()
-		label_instance.position = position
-		label_instance.text = str(base_points * combo)
-		Globals.score = (Globals.score + base_points * combo)
-		combo = combo + 1
-		add_child(label_instance)
-		ui_instance.set_score(Globals.score)
+func _on_enemy_hit(position):
+	var label_instance = pop_label.instance()
+	label_instance.position = position
+	label_instance.text = str(base_points * combo)
+	Globals.score = (Globals.score + base_points * combo)
+	combo = combo + 1
+	add_child(label_instance)
+	ui_instance.set_score(Globals.score)
+	
+	var powerup =  powerup_trail.instance()
+	
+	var perc = randf()
+	var powerup_type = null
+	
+	if perc <= 1:
+		perc = int(rand_range(0, 4))
 		
-		var powerup =  powerup_trail.instance()
-		
-		var perc = randf()
-		var powerup_type = null
-		
-		if perc < 1:
-			perc = int(rand_range(0, 2))
-			
-			if perc == 0:
-				powerup_type = powerup.Powerup_Type.SHIELD
-			elif perc == 1:
-				powerup_type = powerup.Powerup_Type.SPREAD
+		if perc == 0:
+			powerup_type = powerup.Powerup_Type.SHIELD
+		elif perc == 1:
+			powerup_type = powerup.Powerup_Type.SPREAD
+		elif perc == 2:
+			powerup_type = powerup.Powerup_Type.CROSS
+		elif perc == 3:
+			powerup_type = powerup.Powerup_Type.BOMB
 				
-			powerup.prepare(powerup_type)
-			powerup.player = player_node
-			powerup.position = position
-			powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
-			add_child(powerup)
+		powerup.prepare(powerup_type)
+		powerup.player = player_node
+		powerup.position = position
+		powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
+		add_child(powerup)
 
 func _on_timer_enemy_timeout():
 	var enemy_instance
@@ -230,6 +233,10 @@ func spawn_asteroid_children(size, position):
 func _on_powerup_pickup(powerup):
 	if powerup ==  Powerup.Powerup_Type.SPREAD:
 		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
+	elif powerup ==  Powerup.Powerup_Type.CROSS:
+		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 5)
+	elif powerup ==  Powerup.Powerup_Type.BOMB:
+		player_node.change_weapon(player_node.Weapon_Type.BOMB, true, 5)
 	elif powerup == Powerup.Powerup_Type.SHIELD:
 		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 10)
 	pass

@@ -2,13 +2,14 @@ extends Area2D
 
 signal enemy_hit
 
-enum Weapon_Type { NONE, SINGLE, SPREAD, SHIELD }
+enum Weapon_Type { NONE, SINGLE, SPREAD, CROSS, BOMB, LASER, SHIELD }
 export (Weapon_Type) var weapon_type
 
 export(Shape2D) var base_shape
 export(Shape2D) var shield_shape
 
 export(PackedScene) var bullet = load("res://Objects/Bullet.tscn")
+export(PackedScene) var bomb = load("res://Objects/Bomb.tscn")
 export(bool) var is_player = true
 export(bool) var was_hit = false
 
@@ -32,6 +33,9 @@ var impenetrable_shield = false
 
 var timer = null
 var timer_weapon_turnoff = null
+var timer_bomb_delay = null
+
+var bomb_active = false
 
 func shake(duration = 0.2, frequency = 15, amplitude = 16, priority = 0):
 	$Camera2D/ScreenShake.start(duration, frequency, amplitude, priority)
@@ -69,6 +73,12 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 		timer.set_wait_time(0.5)
 		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.NONE:
+		timer.set_wait_time(.5)
+	elif self.weapon_type == Weapon_Type.CROSS:
+		timer.set_wait_time(.5)
+	elif self.weapon_type == Weapon_Type.BOMB:
+		timer.set_wait_time(0)
+	elif self.weapon_type == Weapon_Type.LASER:
 		timer.set_wait_time(0)
 		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.SHIELD:
@@ -97,8 +107,14 @@ func _on_Timer_weapon_timeout():
 		
 	change_weapon(Weapon_Type.SINGLE, false)
 
+func set_bomb_delay():
+	timer_bomb_delay = Timer.new()
+	add_child(timer_bomb_delay)
+	timer_bomb_delay.connect("timeout", self, "_on_bomb_timeout")
+	timer_bomb_delay.set_wait_time(2)
+	timer_bomb_delay.set_one_shot(false)
+
 func _ready():
-	
 	timer = Timer.new()
 	add_child(timer)
 	
@@ -141,8 +157,38 @@ func _on_Timer_timeout():
 				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-105))*2, sin(deg2rad(currentDirection-105))*2)*300
 			bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
 			get_parent().add_child(bullet_instance)
-		pass
-
+	elif weapon_type == Weapon_Type.CROSS:
+		for idx in range(4):
+			var bullet_instance = bullet.instance()
+			bullet_instance.set_name("Bullet")
+			bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+			bullet_instance.player_node = self
+						
+			if idx == 0:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-50))*2, sin(deg2rad(currentDirection-50))*2)*300
+			elif idx == 1:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-120))*2, sin(deg2rad(currentDirection-120))*2)*300
+			elif idx == 2:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection-170))*2, sin(deg2rad(currentDirection-170))*2)*300
+			elif idx == 3:
+				bullet_instance.direction = Vector2(cos(deg2rad(currentDirection))*2, sin(deg2rad(currentDirection))*2)*300
+			bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
+			get_parent().add_child(bullet_instance)
+	elif weapon_type == Weapon_Type.BOMB:
+		if not bomb_active:
+			# create a BOMB.
+			var bomb_instance = bomb.instance()
+			bomb_instance.set_name("Bullet")
+			bomb_instance.direction = Vector2(cos(deg2rad(currentDirection-90)), sin(deg2rad(currentDirection-90)))
+			bomb_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
+			bomb_instance.connect("enemy_hit", self, "_on_enemy_hit")
+			bomb_instance.player_node = self
+			get_parent().add_child(bomb_instance)
+			
+			self.set_bomb_delay()
+			timer_bomb_delay.start();
+			bomb_active = true
+			
 func _on_enemy_hit(position):
 	emit_signal("enemy_hit", position)
 
@@ -213,3 +259,7 @@ func _physics_process(delta):
 	position.y = lerp(position.y, position.y + motion.y, delta)
 	
 	pass
+
+func _on_bomb_timeout():
+	bomb_active = false
+	
