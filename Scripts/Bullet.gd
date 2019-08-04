@@ -17,3 +17,5 @@ func _on_Bullet_body_entered(body):
 	if (not body.get("is_enemy") == null):
 		body.queue_free()
 		emit_signal("enemy_hit", body.position)
+	elif (not body.get("is_asteroid") == null):
+		body.handle_collision()

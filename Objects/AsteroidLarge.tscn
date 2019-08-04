@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scripts/Asteroid.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/asteroid-large.png" type="Texture" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 55.7984
+
+[node name="Node2D" type="Area2D"]
+collision_layer = 2
+script = ExtResource( 1 )
+max_speed = 2.0
+min_rotation = 2.0
+max_rotation = 5.0
+asteroid_size = 2
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 3, 3 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 1.04674, 0 )
+shape = SubResource( 1 )
