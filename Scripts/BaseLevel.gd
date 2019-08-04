@@ -223,8 +223,6 @@ func spawn_asteroid_children(size, position):
 	asteroid_instance.asteroid_size = size
 		
 func _on_powerup_pickup(powerup):
-	if powerup ==  Powerup.Powerup_Type.SHIELD:
-		player_node.change_weapon(player_node.Weapon_Type.SHIELD, false)
-	elif powerup ==  Powerup.Powerup_Type.SPREAD:
+	if powerup ==  Powerup.Powerup_Type.SPREAD:
 		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
 	pass
