@@ -28,7 +28,6 @@ export (String, FILE, "*.tscn") var game_over_scene
 export (Vector2) var motion = Vector2()
 var currentDirection = 0
 var current_speed = 100
-var shield_hits = 2
 var impenetrable_shield = false
 
 var timer = null
@@ -47,7 +46,7 @@ func set_shield():
 	if impenetrable_shield:
 		return
 	
-	shield_hits = 2
+	Globals.shield = 2
 	var target_mod = $ActiveShield.modulate;
 	$DeactiveShield.visible = false
 	$ActiveShield.visible = true
@@ -204,11 +203,12 @@ func _process(delta):
 		if impenetrable_shield:
 			return
 		
-		if shield_hits > 1:
+		if Globals.shield > 1:
 			shake()
-			shield_hits -= 1
-		elif shield_hits == 1:
-			shield_hits -= 1
+			Globals.shield -= 1
+			Globals.recharge_shield = true
+		elif Globals.shield == 1:
+			Globals.shield -= 1
 			lose_shield()
 		else:
 			# Soon we will go to the game over screen, but for now just keep it as a restart.
@@ -288,7 +288,6 @@ func set_bomb():
 		bomb_active = true
 
 func _on_bomb_timeout():
-	print("Boom")
 	if bomb_active:
 		bomb_active = false
 	
