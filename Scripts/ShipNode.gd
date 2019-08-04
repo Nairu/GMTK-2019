@@ -2,7 +2,7 @@ extends Area2D
 
 signal enemy_hit
 
-enum Weapon_Type { NONE, SINGLE, SPREAD }
+enum Weapon_Type { NONE, SINGLE, SPREAD, SHIELD }
 export (Weapon_Type) var weapon_type
 
 export(PackedScene) var bullet = load("res://Objects/Bullet.tscn")
@@ -34,6 +34,9 @@ func shake(duration = 0.2, frequency = 15, amplitude = 16, priority = 0):
 	$Camera2D/ScreenShake.start(duration, frequency, amplitude, priority)
 
 func set_shield():
+	if impenetrable_shield:
+		return
+	
 	shield_hits = 2
 	var target_mod = $ActiveShield.modulate;
 	$DeactiveShield.visible = false
@@ -63,10 +66,26 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 		timer.set_wait_time(0.5)
 	elif self.weapon_type == Weapon_Type.NONE:
 		timer.set_wait_time(0)
+	elif self.weapon_type == Weapon_Type.SHIELD:
+		timer.set_wait_time(0)
+		set_shield()
+		impenetrable_shield = true
+		var scale = $ActiveShield.scale
+		scale *= 2
+		$ShieldCollision.disabled = false
+		$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, scale, 1, Tween.TRANS_SINE, Tween.EASE_IN)
+		$ShieldTween.start()
 	else:
 		timer.set_wait_time(0.25)
 
 func _on_Timer_weapon_timeout():
+	if weapon_type == Weapon_Type.SHIELD:
+		impenetrable_shield = false
+		$ShieldCollision.disabled = true
+		$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, Vector2(1,1), 1, Tween.TRANS_SINE, Tween.EASE_IN)
+		$ShieldTween.start()
+		set_shield()
+		
 	change_weapon(Weapon_Type.SINGLE, false)
 
 func _ready():
@@ -121,6 +140,9 @@ func _on_enemy_hit(position):
 func _process(delta):
 	if was_hit:
 		was_hit = false
+		if impenetrable_shield:
+			return
+		
 		if shield_hits > 1:
 			shake()
 			shield_hits -= 1

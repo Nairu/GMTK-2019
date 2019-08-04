@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/ShipNode.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Bullet.tscn" type="PackedScene" id=2]
@@ -39,6 +39,9 @@ animations = [ {
 "speed": 6.0
 } ]
 
+[sub_resource type="CircleShape2D" id=5]
+radius = 43.0116
+
 [node name="ShipNode" type="Area2D"]
 collision_mask = 7
 script = ExtResource( 1 )
@@ -68,7 +71,6 @@ drag_margin_bottom = 0.5
 [node name="ScreenShake" parent="Camera2D" instance=ExtResource( 5 )]
 
 [node name="ActiveShield" type="AnimatedSprite" parent="."]
-visible = false
 frames = SubResource( 3 )
 
 [node name="DeactiveShield" type="AnimatedSprite" parent="."]
@@ -79,3 +81,8 @@ frames = SubResource( 4 )
 
 [node name="ShieldTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="ShieldCollision" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource( 5 )
+disabled = true

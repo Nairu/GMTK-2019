@@ -106,6 +106,7 @@ func _on_enemy_hit(position, reward_player):
 				powerup_type = powerup.Powerup_Type.SPREAD
 				
 			powerup.prepare(powerup_type)
+			powerup.player = player_node
 			powerup.position = position
 			powerup.connect("powerup_pickup", self, "_on_powerup_pickup")
 			add_child(powerup)
@@ -229,4 +230,6 @@ func spawn_asteroid_children(size, position):
 func _on_powerup_pickup(powerup):
 	if powerup ==  Powerup.Powerup_Type.SPREAD:
 		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
+	elif powerup == Powerup.Powerup_Type.SHIELD:
+		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 10)
 	pass
