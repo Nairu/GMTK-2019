@@ -9,7 +9,10 @@ func _ready():
 	$Explosion.connect("animation_finished", self, "_destroy")
 	$ExplosionAudio.play()
 	$CollisionShape2D.shape.radius = 18
-	
+
+func handle_collision():
+	queue_free()	
+
 func _process(delta):	
 	# We want to dynamically change the size of the collider.
 	if $Explosion.frame <= 2:
