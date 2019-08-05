@@ -26,7 +26,18 @@ func _ready():
 	$Sprite.visible = false
 	$Wormhole.modulate.a = 0	
     
+var distance = 0
+var frames_hidden = 0
+var frames_until_destroyed = 1000
 func _process(delta):
+	
+	if player_node == null:
+		player_node = get_node("/root/BaseNode/Player")
+	
+	distance = player_node.position.distance_to(position)	
+	if distance > 1000:
+		queue_free()
+	
 	$Wormhole.modulate.a = min($Wormhole.modulate.a + 0.01, 1)
 	$Wormhole.rotation_degrees = $Wormhole.rotation_degrees + 1
 	$Wormhole.scale.x = lerp($Wormhole.scale.x, 3, 0.01)
