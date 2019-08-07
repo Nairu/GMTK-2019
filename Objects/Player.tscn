@@ -48,7 +48,6 @@ animations = [ {
 [node name="ShipNode" type="Area2D"]
 collision_mask = 7
 script = ExtResource( 1 )
-weapon_type = 1
 base_shape = SubResource( 1 )
 shield_shape = SubResource( 2 )
 bullet = ExtResource( 2 )

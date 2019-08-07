@@ -31,10 +31,9 @@ margin_bottom = 37.0
 custom_fonts/font = SubResource( 1 )
 text = "Shield Health: 2"
 
-[node name="ShieldCharge" type="ColorRect" parent="."]
-visible = false
+[node name="ShieldCharger" type="TextureProgress" parent="."]
 margin_left = 10.0
-margin_top = 37.0
+margin_top = 40.0
 margin_right = 280.0
-margin_bottom = 52.0
-color = Color( 0.945098, 0.976471, 0.0117647, 1 )
+margin_bottom = 54.0
+max_value = 5.0
