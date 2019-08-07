@@ -39,6 +39,8 @@ func _physics_process(delta):
 func _on_Asteroid_body_entered(body):
 	if (not body.get("is_player") == null):
 		#emit_signal("player_hit")
+		handle_collision()
 		body.was_hit = true
 	elif (not body.get("is_enemy") == null):
+		handle_collision()
 		body.die(false)

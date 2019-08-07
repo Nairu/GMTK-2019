@@ -23,3 +23,7 @@ PRESS SPACE TO
 CONTINUE"
 align = 1
 valign = 1
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true

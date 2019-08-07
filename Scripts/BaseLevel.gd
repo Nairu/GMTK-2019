@@ -7,6 +7,8 @@ const Powerup = preload("res://Scripts/Powerup.gd")
 var timer = null
 var timer_enemy = null
 var timer_asteroid = null
+var timer_difficulty = null
+
 export (PackedScene) var enemy_flier
 export (PackedScene) var enemy_follower
 export (PackedScene) var enemy_circler
@@ -39,7 +41,11 @@ var base_points = 100
 
 var powerup = null
 
+var enemy_count = 0
+
 func _ready():
+	$AudioStreamPlayer.play()
+	
 	player_node = player.instance()
 	#player_node.connect("enemy_hit", self, "_on_enemy_hit")
 	player_node.position = Vector2(play_area.x / 2, play_area.y / 2)
@@ -61,7 +67,7 @@ func _ready():
 	add_child(timer_enemy)
 	
 	timer_enemy.connect("timeout", self, "_on_timer_enemy_timeout")
-	timer_enemy.set_wait_time(2.0)
+	timer_enemy.set_wait_time(3)
 	timer_enemy.set_one_shot(false)
 	timer_enemy.start()
 	
@@ -72,17 +78,33 @@ func _ready():
 	timer_asteroid.set_wait_time(5.0)
 	timer_asteroid.set_one_shot(false)
 	timer_asteroid.start()
+	
+	timer_difficulty = Timer.new()
+	add_child(timer_difficulty)
+	
+	timer_difficulty.connect("timeout", self, "_on_timer_difficulty_changed")
+	timer_difficulty.set_wait_time(10.0)
+	timer_difficulty.set_one_shot(false)
+	timer_difficulty.start()
+
+func _on_timer_difficulty_changed():
+	var time = max(timer_enemy.wait_time-0.2, 0.3)
+	timer_enemy.set_wait_time(time)
+	timer_enemy.start()
 
 func _process(delta):
-	player_viewable_bounds = Rect2(player_node.position.x - screen_size.x/2, 
-								   player_node.position.y - screen_size.y/2,
-								   screen_size.x * 2,
-								   screen_size.y * 2)
+	player_viewable_bounds = get_parent().get_visible_rect()
+	player_viewable_bounds.position = player_node.position
+	player_viewable_bounds.position.x -= player_node.get_node("Camera2D").drag_margin_left*3
+	player_viewable_bounds.end.x += player_node.get_node("Camera2D").drag_margin_right*3
+	player_viewable_bounds.position.y -= player_node.get_node("Camera2D").drag_margin_top*3
+	player_viewable_bounds.end.y += player_node.get_node("Camera2D").drag_margin_bottom*3
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 
 func _on_enemy_hit(position, reward_player):
+	enemy_count -= 1
 	if reward_player:
 		var label_instance = pop_label.instance()
 		label_instance.position = position
@@ -96,7 +118,11 @@ func _on_enemy_hit(position, reward_player):
 		var perc = randf()
 		var powerup_type = null
 		
-		if perc <= 1:
+		var likelihood = 0.5
+		if not player_node.weapon_type == player_node.Weapon_Type.NONE:
+			likelihood = 0.1
+		
+		if perc < likelihood:
 			perc = int(rand_range(0, 4))
 			
 			if perc == 0:
@@ -115,46 +141,65 @@ func _on_enemy_hit(position, reward_player):
 			add_child(powerup)
 
 func _on_timer_enemy_timeout():
-	var enemy_instance
 	
+	if enemy_count > 30:
+		return
+	
+	enemy_count += 1
+	
+	var enemy_instance
+
 	var chance = randf()
 	if chance < 0.1:
 		enemy_instance = enemy_bomber.instance()
 	elif chance < 0.3:
 		enemy_instance = enemy_follower.instance()
+	elif chance < 0.6:
+		enemy_instance = enemy_circler.instance()
 	else:
 		enemy_instance = enemy_flier.instance()
 	
 	enemy_instance.set_name("Enemy")
 	#enemy_instance.connect("player_hit", self, "_on_player_hit")
-	var edge = randf();	
+	var edge = randf();
 	
-	var x = 0
-	var y = 0
-	
+#	var x = rand_range(player_viewable_bounds.position.x, player_viewable_bounds.end.x)
+#	var y = rand_range(player_viewable_bounds.position.y, player_viewable_bounds.end.y)
+	var rand_x = rand_range(-50, 50)
+	var rand_y = rand_range(-50, 50)
+	var x = player_node.position.x + rand_x + (-50 if rand_x <= 0 else 50)
+	var y = player_node.position.y + rand_y + (-50 if rand_y <= 0 else 50)
+		
 	# We can use this to choose top, bottom, left and right.
-	if edge < 0.25:
-		# spawn on the left edge somewhere.
-		x = player_viewable_bounds.position.x + 20
-		y = player_viewable_bounds.position.y + randi()%int(player_viewable_bounds.size.y)
-	elif edge < 0.5:
-		#spawn on the top edge somewhere
-		x = player_viewable_bounds.position.x + randi()%int(player_viewable_bounds.size.x)
-		y = player_viewable_bounds.position.y + 20
-	elif edge < 0.75:
-		#spawn on the right edge somewhere
-		x = player_viewable_bounds.end.x - 20
-		y = player_viewable_bounds.end.y - randi()%int(player_viewable_bounds.size.y)
-	else:
-		x = player_viewable_bounds.end.x - randi()%int(player_viewable_bounds.size.x)
-		y = player_viewable_bounds.end.y - 20
+#	if edge < 0.25:
+#		# spawn on the left edge somewhere.
+#		x = player_viewable_bounds.position.x + 20
+#		y = player_viewable_bounds.position.y + randi()%int(player_viewable_bounds.size.y)
+#	elif edge < 0.5:
+#		#spawn on the top edge somewhere
+#		x = player_viewable_bounds.position.x + randi()%int(player_viewable_bounds.size.x)
+#		y = player_viewable_bounds.position.y + 20
+#	elif edge < 0.75:
+#		#spawn on the right edge somewhere
+#		x = player_viewable_bounds.end.x - 20
+#		y = player_viewable_bounds.end.y - randi()%int(player_viewable_bounds.size.y)
+#	else:
+#		x = player_viewable_bounds.end.x - randi()%int(player_viewable_bounds.size.x)
+#		y = player_viewable_bounds.end.y - 20
 		
 	enemy_instance.position = Vector2(x,y)
 	enemy_instance.connect("enemy_died", self, "_on_enemy_hit")
 	
 	add_child(enemy_instance)
 	
-func _on_timer_asteroid_timeout():
+func _on_timer_asteroid_timeout():	
+	
+	var x = rand_range(player_viewable_bounds.position.x, player_viewable_bounds.end.x)
+	var y = rand_range(player_viewable_bounds.position.y, player_viewable_bounds.end.y)
+		
+#	if player_viewable_bounds.has_point(Vector2(x,y)):
+#		return
+		
 	var asteroid_instance = null
 	var chance = randf()
 	
@@ -166,32 +211,8 @@ func _on_timer_asteroid_timeout():
 		asteroid_instance = asteroid_small.instance()
 	
 	asteroid_instance.set_name("ROID!")
-	
-	var edge = randf();	
-	
-	var x = 0
-	var y = 0
-	
-	# We can use this to choose top, bottom, left and right.
-	if edge < 0.25:
-		# spawn on the left edge somewhere.
-		x = player_viewable_bounds.position.x - 100
-		y = player_viewable_bounds.position.y + randi()%int(player_viewable_bounds.size.y)
-	elif edge < 0.5:
-		#spawn on the top edge somewhere
-		x = player_viewable_bounds.position.x + randi()%int(player_viewable_bounds.size.x)
-		y = player_viewable_bounds.position.y - 100
-	elif edge < 0.75:
-		#spawn on the right edge somewhere
-		x = player_viewable_bounds.end.x + 100
-		y = player_viewable_bounds.end.y - randi()%int(player_viewable_bounds.size.y)
-	else:
-		x = player_viewable_bounds.end.x - randi()%int(player_viewable_bounds.size.x)
-		y = player_viewable_bounds.end.y + 100
+	asteroid_instance.position = Vector2(x,y)
 		
-	if not player_viewable_bounds.has_point(Vector2(x,y)):
-		asteroid_instance.position = Vector2(x,y)
-	
 	asteroid_instance.connect("spawn_children", self, "spawn_asteroid_children")
 	
 	add_child(asteroid_instance)
@@ -232,11 +253,11 @@ func spawn_asteroid_children(size, position):
 		
 func _on_powerup_pickup(powerup):
 	if powerup ==  Powerup.Powerup_Type.SPREAD:
-		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 5)
+		player_node.change_weapon(player_node.Weapon_Type.SPREAD, true, 2)
 	elif powerup ==  Powerup.Powerup_Type.CROSS:
-		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 5)
+		player_node.change_weapon(player_node.Weapon_Type.CROSS, true, 8)
 	elif powerup ==  Powerup.Powerup_Type.BOMB:
 		player_node.change_weapon(player_node.Weapon_Type.BOMB, true, 5)
 	elif powerup == Powerup.Powerup_Type.SHIELD:
-		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 10)
+		player_node.change_weapon(player_node.Weapon_Type.SHIELD, true, 5)
 	pass

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/ShieldsDown.wav-f39d27aede8e9f15f2a8224b777cd427.sample"
+
+[deps]
+
+source_file="res://Sound Effects/ShieldsDown.wav"
+dest_files=[ "res://.import/ShieldsDown.wav-f39d27aede8e9f15f2a8224b777cd427.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

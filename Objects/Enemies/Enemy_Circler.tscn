@@ -9,7 +9,7 @@
 [ext_resource path="res://Sprites/wormhole-3.png" type="Texture" id=7]
 [ext_resource path="res://Sprites/wormhole-4.png" type="Texture" id=8]
 [ext_resource path="res://Sprites/wormhole-5.png" type="Texture" id=9]
-[ext_resource path="res://Sprites/enemy-ship-4.png" type="Texture" id=10]
+[ext_resource path="res://Sprites/enemy-ship-1.png" type="Texture" id=10]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.811321, 1 )
@@ -27,7 +27,7 @@ animations = [ {
 collision_layer = 2
 collision_mask = 3
 script = ExtResource( 1 )
-type = 3
+type = 2
 explosion_small = ExtResource( 2 )
 explosion = ExtResource( 3 )
 
@@ -35,19 +35,10 @@ explosion = ExtResource( 3 )
 targetPath = NodePath("..")
 trail_colour = SubResource( 1 )
 
-[node name="Trail2" parent="." instance=ExtResource( 4 )]
-targetPath = NodePath("../Trail1Pos")
-trail_colour = SubResource( 1 )
-
-[node name="Trail3" parent="." instance=ExtResource( 4 )]
-targetPath = NodePath("../Trail2Pos")
-trail_colour = SubResource( 1 )
-
 [node name="Wormhole" type="AnimatedSprite" parent="."]
-modulate = Color( 0.360784, 0.760784, 0.337255, 1 )
-scale = Vector2( 2, 2 )
 frames = SubResource( 2 )
 animation = "Idle"
+frame = 4
 playing = true
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -58,10 +49,4 @@ texture = ExtResource( 10 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 visible = false
-polygon = PoolVector2Array( 17, 2, 20, 1, 20, -1, 17, -2, 15, -4, 7, -4, -7, -15, -13, -15, -14, -13, -9, -9, -10, -4, -14, -3, -17, -6, -19, -6, -19, -4, -16, -1, -18, -1, -18, 1, -16, 1, -19, 4, -19, 6, -17, 6, -14, 3, -10, 4, -8, 9, -14, 13, -13, 15, -7, 15, 3, 7, 7, 4, 15, 4 )
-
-[node name="Trail1Pos" type="Node2D" parent="."]
-position = Vector2( -8, -6 )
-
-[node name="Trail2Pos" type="Node2D" parent="."]
-position = Vector2( -8, 6 )
+polygon = PoolVector2Array( 9, 2, 9, -2, 8, -2, 8, -3, 7, -3, 7, -4, 4, -4, -3, -11, -7, -11, -7, -10, -9, -10, -9, -9, -2, -4, -2, -2, -4, -1, -4, 1, -2, 2, -2, 4, -9, 9, -9, 10, -7, 10, -7, 11, -3, 11, 4, 4, 7, 4, 7, 3, 8, 3, 8, 2 )

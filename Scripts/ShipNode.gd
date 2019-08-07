@@ -65,6 +65,7 @@ func lose_shield():
 	$ShieldTimer.start(5)
 
 func change_weapon(weapon_type, turnoff, turnoff_time=0):
+	
 	self.weapon_type = weapon_type
 	if turnoff:
 		timer_weapon_turnoff.set_wait_time(turnoff_time)
@@ -72,18 +73,30 @@ func change_weapon(weapon_type, turnoff, turnoff_time=0):
 		timer_weapon_turnoff.start()
 	
 	if self.weapon_type == Weapon_Type.SPREAD:
+		$PowerupSound.volume_db = -10
+		$PowerupSound.play()
 		timer.set_wait_time(0.5)
 		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.NONE:
 		timer.set_wait_time(.5)
 	elif self.weapon_type == Weapon_Type.CROSS:
+		$PowerupSound.volume_db = -10
+		$PowerupSound.play()
 		timer.set_wait_time(.5)
+		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.BOMB:
+		$PowerupSound.volume_db = -10
+		$PowerupSound.play()
 		timer.set_wait_time(0)
+		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.LASER:
+		$PowerupSound.volume_db = -10
+		$PowerupSound.play()
 		timer.set_wait_time(0)
 		turnoff_shield()
 	elif self.weapon_type == Weapon_Type.SHIELD:
+		$PowerupSound.volume_db = -10
+		$PowerupSound.play()
 		if not impenetrable_shield:
 			timer.set_wait_time(0)
 			set_shield()
@@ -101,7 +114,8 @@ func turnoff_shield():
 	$CollisionShape2D.shape = base_shape
 	$ShieldTween.interpolate_property($ActiveShield, "scale", $ActiveShield.scale, Vector2(1,1), 1, Tween.TRANS_SINE, Tween.EASE_IN)
 	$ShieldTween.start()
-	set_shield()
+	Globals.shield = 2
+	$ActiveShield.play("default")
 
 func _on_Timer_weapon_timeout():
 	if weapon_type == Weapon_Type.SHIELD:
@@ -143,8 +157,10 @@ func _on_Timer_timeout():
 		bullet_instance.position = get_position() + Vector2(cos(deg2rad(currentDirection-90))*2, sin(deg2rad(currentDirection-90))*2)
 		bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
 		bullet_instance.player_node = self
+		#$GunShotSound.play()
 		get_parent().add_child(bullet_instance)
 	elif weapon_type == Weapon_Type.SPREAD:
+		#$GunShotSound.play()
 		for idx in range(3):
 			var bullet_instance = bullet.instance()
 			bullet_instance.set_name("Bullet")
@@ -160,6 +176,7 @@ func _on_Timer_timeout():
 			bullet_instance.connect("enemy_hit", self, "_on_enemy_hit")
 			get_parent().add_child(bullet_instance)
 	elif weapon_type == Weapon_Type.CROSS:
+		#$GunShotSound.play()
 		for idx in range(4):
 			var bullet_instance = bullet.instance()
 			bullet_instance.set_name("Bullet")
