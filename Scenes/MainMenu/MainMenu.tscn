@@ -1,0 +1,94 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://Scripts/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/spaceranger.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 50
+font_data = ExtResource( 2 )
+
+[sub_resource type="InputEventAction" id=4]
+action = "ui_accept"
+
+[sub_resource type="ShortCut" id=5]
+shortcut = SubResource( 4 )
+
+[sub_resource type="InputEventAction" id=2]
+action = "ui_cancel"
+
+[sub_resource type="ShortCut" id=3]
+shortcut = SubResource( 2 )
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+play_scene = "res://Scenes/BaseLevel.tscn"
+rules_scene = "res://Scenes/MainMenu/RulesMenu.tscn"
+credits_scene = "res://Scenes/MainMenu/CreditsMenu.tscn"
+
+[node name="Title" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -467.0
+custom_fonts/font = SubResource( 1 )
+text = "Welcome to
+Repetitive Space injury"
+align = 1
+valign = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+margin_left = 224.0
+margin_top = 192.0
+margin_right = 800.0
+margin_bottom = 551.0
+focus_mode = 2
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 24
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="ButtonContainer"]
+margin_top = 41.0
+margin_right = 576.0
+margin_bottom = 92.0
+hint_tooltip = "Press space to start!"
+focus_next = NodePath("../RulesButton")
+focus_previous = NodePath("../QuitButton")
+custom_fonts/font = SubResource( 1 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 5 )
+text = "Play"
+
+[node name="RulesButton" type="Button" parent="ButtonContainer"]
+margin_top = 116.0
+margin_right = 576.0
+margin_bottom = 167.0
+rect_pivot_offset = Vector2( 77.7308, 12.7181 )
+focus_next = NodePath("../CreditsButton")
+focus_previous = NodePath("../PlayButton")
+custom_fonts/font = SubResource( 1 )
+shortcut_in_tooltip = false
+text = "How To Play"
+
+[node name="CreditsButton" type="Button" parent="ButtonContainer"]
+margin_top = 191.0
+margin_right = 576.0
+margin_bottom = 242.0
+rect_pivot_offset = Vector2( 314, 51 )
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../RulesButton")
+custom_fonts/font = SubResource( 1 )
+shortcut_in_tooltip = false
+text = "Credits"
+
+[node name="QuitButton" type="Button" parent="ButtonContainer"]
+margin_top = 266.0
+margin_right = 576.0
+margin_bottom = 317.0
+rect_pivot_offset = Vector2( 314, 51 )
+focus_next = NodePath("../PlayButton")
+focus_previous = NodePath("../CreditsButton")
+custom_fonts/font = SubResource( 1 )
+shortcut_in_tooltip = false
+shortcut = SubResource( 3 )
+text = "Quit"
