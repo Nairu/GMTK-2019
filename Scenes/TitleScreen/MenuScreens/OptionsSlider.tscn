@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Fonts/spaceranger_48.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Sprites/options/minus_button_01.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/options/minus_button_02.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/options/plus_button_01.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/options/plus_button_02.png" type="Texture" id=5]
+
+[node name="HBoxContainer" type="MarginContainer"]
+margin_right = 400.0
+margin_bottom = 43.0
+rect_min_size = Vector2( 400, 43 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 413.0
+margin_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Name" type="Label" parent="HBoxContainer"]
+margin_right = 137.0
+margin_bottom = 43.0
+custom_fonts/font = ExtResource( 1 )
+text = "Name"
+
+[node name="Minus" type="TextureButton" parent="HBoxContainer"]
+margin_left = 141.0
+margin_right = 173.0
+margin_bottom = 43.0
+shortcut_in_tooltip = false
+texture_normal = ExtResource( 2 )
+texture_pressed = ExtResource( 3 )
+
+[node name="ProgressBar" type="ProgressBar" parent="HBoxContainer"]
+margin_left = 177.0
+margin_top = 15.0
+margin_right = 377.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 25 )
+size_flags_horizontal = 2
+size_flags_vertical = 2
+value = 50.0
+percent_visible = false
+
+[node name="Plus" type="TextureButton" parent="HBoxContainer"]
+margin_left = 381.0
+margin_right = 413.0
+margin_bottom = 43.0
+texture_normal = ExtResource( 4 )
+texture_pressed = ExtResource( 5 )
