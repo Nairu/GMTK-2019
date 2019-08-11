@@ -1,38 +1,21 @@
 extends Control
 
-signal _on_PlayButton_pressed;
-signal _on_RulesButton_pressed;
-signal _on_CreditsButton_pressed;
-signal _on_QuitButton_pressed;
-
-export (String, FILE, "*.tscn") var play_scene
-export (String, FILE, "*.tscn") var rules_scene
-export (String, FILE, "*.tscn") var credits_scene
-
-onready var play: Button = $ButtonContainer/PlayButton
-onready var rules: Button = $ButtonContainer/RulesButton
-onready var credits: Button = $ButtonContainer/CreditsButton
-onready var quit: Button = $ButtonContainer/QuitButton
+var scene_path_to_load
 
 func _ready():
-	play.connect("pressed", self, "_on_PlayButton_pressed")
-	rules.connect("pressed", self, "_on_RulesButton_pressed")
-	credits.connect("pressed", self, "_on_CreditsButton_pressed")
-	quit.connect("pressed", self, "_on_QuitButton_pressed")
-	
-	play.grab_focus()
+	$Menu/Body/Buttons/PlayButton.grab_focus()
+	for button in $Menu/Body/Buttons.get_children():
+		if "scene_to_load" in button:
+			button.connect("pressed", self, "_on_Button_pressed", [button.scene_to_load])
 		
 
-func _on_PlayButton_pressed():
-	get_tree().change_scene(play_scene)
+func _on_Button_pressed(scene_to_load):
+	scene_path_to_load = scene_to_load
+	$FadeIn.show()
+	$FadeIn.fade_in()
 	
-func _on_RulesButton_pressed():
-	get_tree().change_scene(rules_scene)
-	pass
-	
-func _on_CreditsButton_pressed():
-	get_tree().change_scene(credits_scene)
-	pass
-	
+func _on_FadeIn_fade_finished():
+	get_tree().change_scene(scene_path_to_load)
+
 func _on_QuitButton_pressed():
 	get_tree().quit()

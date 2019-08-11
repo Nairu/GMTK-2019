@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Scripts/MainMenu.gd" type="Script" id=1]
+[ext_resource path="res://Fonts/spaceranger_72.tres" type="DynamicFont" id=2]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/PlayButton.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/HowToPlayButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/OptionsButton.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/CreditsButton.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Scenes/TitleScreen/Buttons/QuitButton.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Fonts/spaceranger_24.tres" type="DynamicFont" id=8]
+[ext_resource path="res://Transitions/FadeIn.tscn" type="PackedScene" id=9]
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[node name="Menu" type="VBoxContainer" parent="."]
+margin_left = 120.0
+margin_top = 80.0
+margin_right = 1160.0
+margin_bottom = 640.0
+
+[node name="Title" type="Label" parent="Menu"]
+margin_right = 1040.0
+margin_bottom = 65.0
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 5
+text = "Repetitive Space injury"
+align = 1
+valign = 1
+
+[node name="Body" type="HBoxContainer" parent="Menu"]
+margin_top = 69.0
+margin_right = 1040.0
+margin_bottom = 534.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Buttons" type="VBoxContainer" parent="Menu/Body"]
+margin_right = 1040.0
+margin_bottom = 465.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+alignment = 1
+
+[node name="PlayButton" parent="Menu/Body/Buttons" instance=ExtResource( 3 )]
+margin_top = 42.0
+margin_right = 1040.0
+margin_bottom = 102.0
+
+[node name="HowToPlayButton" parent="Menu/Body/Buttons" instance=ExtResource( 4 )]
+margin_top = 122.0
+margin_right = 1040.0
+margin_bottom = 182.0
+scene_to_load = "res://Scenes/TitleScreen/MenuScreens/HowToPlayScreen.tscn"
+
+[node name="OptionsButton" parent="Menu/Body/Buttons" instance=ExtResource( 5 )]
+margin_top = 202.0
+margin_right = 1040.0
+margin_bottom = 262.0
+scene_to_load = "res://Scenes/TitleScreen/MenuScreens/OptionsScreen.tscn"
+
+[node name="CreditsButton" parent="Menu/Body/Buttons" instance=ExtResource( 6 )]
+margin_top = 282.0
+margin_right = 1040.0
+margin_bottom = 342.0
+scene_to_load = "res://Scenes/TitleScreen/MenuScreens/CreditsScreen.tscn"
+
+[node name="QuitButton" parent="Menu/Body/Buttons" instance=ExtResource( 7 )]
+margin_top = 362.0
+margin_right = 1040.0
+margin_bottom = 422.0
+script = null
+
+[node name="Version" type="Label" parent="Menu"]
+margin_top = 538.0
+margin_right = 1040.0
+margin_bottom = 560.0
+custom_fonts/font = ExtResource( 8 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = -3
+custom_constants/shadow_offset_y = 5
+text = "Prototype - v1.0.0"
+
+[node name="FadeIn" parent="." instance=ExtResource( 9 )]
+visible = false
+[connection signal="pressed" from="Menu/Body/Buttons/QuitButton" to="." method="_on_QuitButton_pressed"]
+[connection signal="fade_finished" from="FadeIn" to="." method="_on_FadeIn_fade_finished"]
