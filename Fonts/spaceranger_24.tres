@@ -5,4 +5,5 @@ font_path = "res://Fonts/spaceranger.ttf"
 
 [resource]
 size = 24
+use_filter = true
 font_data = SubResource( 1 )

@@ -24,6 +24,7 @@ animations = [ {
 radius = 13.0
 
 [node name="ExplosionBall" type="Area2D"]
+audio_bus_name = "SFX"
 script = ExtResource( 1 )
 cosmetic = true
 

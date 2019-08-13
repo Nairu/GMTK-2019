@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/TitleScreen/MenuScreens/MenuScreen.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/TitleScreen/MenuScreens/OptionsSlider.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/TitleScreen/MenuScreens/Options.gd" type="Script" id=2]
+[ext_resource path="res://Scenes/TitleScreen/MenuScreens/Options/MusicVolumeSlider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/TitleScreen/MenuScreens/Options/SFXVolumeSlider.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Fonts/spaceranger_48.tres" type="DynamicFont" id=5]
 
 [node name="OptionsScreen" instance=ExtResource( 1 )]
 
@@ -11,14 +14,40 @@ alignment = 1
 [node name="Label" parent="VBoxContainer" index="0"]
 text = "Options"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/CenterContainer" index="0"]
+[node name="CenterContainer" parent="VBoxContainer" index="1"]
+margin_bottom = 614.0
+
+[node name="Options" type="VBoxContainer" parent="VBoxContainer/CenterContainer" index="0"]
 margin_right = 1280.0
-margin_bottom = 598.0
+margin_bottom = 545.0
+alignment = 1
+script = ExtResource( 2 )
+
+[node name="MusicVolumeSlider" parent="VBoxContainer/CenterContainer/Options" index="0" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 248.0
+margin_right = 1280.0
+margin_bottom = 270.0
 alignment = 1
 
-[node name="MusicSlider" parent="VBoxContainer/CenterContainer/VBoxContainer" index="0" instance=ExtResource( 2 )]
-margin_left = 440.0
-margin_top = 277.0
-margin_right = 840.0
-margin_bottom = 320.0
+[node name="SFXVolumeSlider" parent="VBoxContainer/CenterContainer/Options" index="1" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 274.0
+margin_right = 1280.0
+margin_bottom = 296.0
+alignment = 1
+
+[node name="SaveButton" type="Button" parent="VBoxContainer" index="2"]
+margin_left = 567.0
+margin_top = 618.0
+margin_right = 712.0
+margin_bottom = 667.0
+rect_min_size = Vector2( 120, 49 )
 size_flags_horizontal = 4
+size_flags_vertical = 5
+custom_fonts/font = ExtResource( 5 )
+text = "Save"
+flat = true
+[connection signal="pressed" from="VBoxContainer/SaveButton" to="VBoxContainer/CenterContainer/Options" method="_on_SaveButton_pressed"]

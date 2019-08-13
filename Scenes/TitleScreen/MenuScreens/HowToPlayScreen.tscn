@@ -9,11 +9,11 @@
 text = "How To Play"
 
 [node name="RichTextLabel" type="Label" parent="VBoxContainer/CenterContainer" index="0"]
-margin_left = 376.0
-margin_top = 277.0
-margin_right = 904.0
-margin_bottom = 320.0
+margin_right = 1280.0
+margin_bottom = 598.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 2 )
 text = "Press space to win"
+align = 1
+valign = 1
