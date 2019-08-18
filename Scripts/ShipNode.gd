@@ -46,17 +46,23 @@ func set_shield():
 	if impenetrable_shield:
 		return
 	
-	Globals.shield = 2
-	var target_mod = $ActiveShield.modulate;
-	$DeactiveShield.visible = false
-	$ActiveShield.visible = true
-	$ActiveShield.play("default")
-	$ActiveShield.modulate.a = 0
-	target_mod.a = 1
-	$ShieldTween.interpolate_property($ActiveShield, "modulate", $ActiveShield.modulate, target_mod, 1, Tween.TRANS_SINE, Tween.EASE_IN)
-	$ShieldTween.repeat = false
-	$ShieldTween.start()
-	
+	if Globals.shield < Globals.shield_max:
+		Globals.shield += 1
+		
+		if Globals.shield < 1:
+			var target_mod = $ActiveShield.modulate;
+			$DeactiveShield.visible = false
+			$ActiveShield.visible = true
+			$ActiveShield.play("default")
+			$ActiveShield.modulate.a = 0
+			target_mod.a = 1
+			$ShieldTween.interpolate_property($ActiveShield, "modulate", $ActiveShield.modulate, target_mod, 1, Tween.TRANS_SINE, Tween.EASE_IN)
+			$ShieldTween.repeat = false
+			$ShieldTween.start()
+		else:
+			$ShieldTimer.start(5)
+
+
 func lose_shield():
 	$ActiveShield.visible = false
 	$DeactiveShield.visible = true
@@ -199,20 +205,20 @@ func _on_enemy_hit(position):
 
 func _process(delta):
 	if was_hit:
+		print("Player was hit!")
 		was_hit = false
 		if impenetrable_shield:
 			return
 		
 		if Globals.shield > 1:
 			shake()
-			Globals.shield -= 1
 			Globals.recharge_shield = true
 		elif Globals.shield == 1:
-			Globals.shield -= 1
 			lose_shield()
 		else:
 			# Soon we will go to the game over screen, but for now just keep it as a restart.
 			get_tree().change_scene(game_over_scene)
+		Globals.shield -= 1
 	
 	b_delay += delta
 	

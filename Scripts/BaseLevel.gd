@@ -60,8 +60,8 @@ func _ready():
 	
 	screen_size = get_viewport_rect().size
 	
-	ui_instance = ui_scene.instance()
-	$CanvasLayer.add_child(ui_instance)
+#	ui_instance = ui_scene.instance()
+#	$CanvasLayer.add_child(ui_instance)
 	
 	timer_enemy = Timer.new()
 	add_child(timer_enemy)

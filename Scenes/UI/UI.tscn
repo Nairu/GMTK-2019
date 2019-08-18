@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/UI.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/UI/Shields.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/UI/Overlay.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Fonts/spaceranger_24.tres" type="DynamicFont" id=4]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
+
+[node name="Shield" parent="." instance=ExtResource( 2 )]
+margin_left = 10.0
+margin_right = 350.0
+
+[node name="ShieldLevels" parent="Shield" index="0"]
+editor/display_folded = true
+
+[node name="Overlay" parent="." instance=ExtResource( 3 )]
+margin_right = 370.0
+margin_bottom = 90.0
+region_rect = Rect2( 0, 0, 100, 100 )
+patch_margin_left = 35
+patch_margin_top = 34
+patch_margin_right = 28
+patch_margin_bottom = 28
+
+[node name="Score" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -30.0
+margin_right = 510.0
+margin_bottom = -8.0
+rect_min_size = Vector2( 500, 0 )
+custom_fonts/font = ExtResource( 4 )
+text = "Score"
+[connection signal="timeout" from="Shield/ShieldRecharge/RechargeTimer" to="." method="_on_RechargeTimer_timeout"]
+
+[editable path="Shield"]

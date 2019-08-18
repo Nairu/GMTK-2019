@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Fonts/spaceranger_24.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scenes/UI/powered-shield.png" type="Texture" id=2]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-background.png" type="Texture" id=3]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-foreground.png" type="Texture" id=4]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-progress-01.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-progress-02.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-progress-03.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/UI/shield-bar-recharge-progress-04.png" type="Texture" id=8]
+
+[sub_resource type="AnimatedTexture" id=1]
+frames = 4
+fps = 12.0
+frame_0/texture = ExtResource( 5 )
+frame_1/texture = ExtResource( 6 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 7 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 8 )
+frame_3/delay_sec = 0.0
+
+[node name="Shields" type="VBoxContainer"]
+margin_right = 340.0
+margin_bottom = 68.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="ShieldLevels" type="HBoxContainer" parent="."]
+margin_right = 340.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 340, 32 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="ShieldLabel" type="Label" parent="ShieldLevels"]
+margin_top = 5.0
+margin_right = 160.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 160, 0 )
+custom_fonts/font = ExtResource( 1 )
+text = "Shields"
+
+[node name="Shields" type="HBoxContainer" parent="ShieldLevels"]
+margin_left = 164.0
+margin_right = 232.0
+margin_bottom = 32.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Shield1" type="TextureRect" parent="ShieldLevels/Shields"]
+margin_right = 32.0
+margin_bottom = 32.0
+texture = ExtResource( 2 )
+
+[node name="Shield2" type="TextureRect" parent="ShieldLevels/Shields"]
+margin_left = 36.0
+margin_right = 68.0
+margin_bottom = 32.0
+texture = ExtResource( 2 )
+
+[node name="ShieldRecharge" type="HBoxContainer" parent="."]
+margin_top = 36.0
+margin_right = 326.0
+margin_bottom = 68.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="RechargingText" type="Label" parent="ShieldRecharge"]
+margin_top = 5.0
+margin_right = 162.0
+margin_bottom = 27.0
+rect_min_size = Vector2( 162, 22 )
+custom_fonts/font = ExtResource( 1 )
+text = "Recharging"
+
+[node name="ShieldRecharging" type="TextureProgress" parent="ShieldRecharge"]
+margin_left = 166.0
+margin_right = 326.0
+margin_bottom = 32.0
+max_value = 5.0
+value = 5.0
+texture_under = ExtResource( 3 )
+texture_over = ExtResource( 4 )
+texture_progress = SubResource( 1 )
+
+[node name="RechargeTimer" type="Timer" parent="ShieldRecharge"]

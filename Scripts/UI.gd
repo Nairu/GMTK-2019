@@ -1,19 +1,28 @@
 extends Control
 
-func _ready():
-	$ShieldCharger.connect("value_changed", self, "_on_update_progress")
+var charging : bool
 
 func _process(delta):
 	$Score.text = "Score: " + str(Globals.score)
-	$Shield.text = "Shield Health: " + str(Globals.shield)
 	
-	if Globals.recharge_shield:
-		print("charing")
-		$ShieldCharger.value = 0
-		
-	if $ShieldCharger.value < 5:
-		pass
-		
-func _on_update_progress(value):
-	pass
+	$Shield/ShieldLevels/Shields/Shield1.visible = Globals.shield >= 1
+	$Shield/ShieldLevels/Shields/Shield2.visible = Globals.shield >= 2
 	
+	if (Globals.recharge_shield and not charging):
+		charging = true
+		$Shield/ShieldRecharge/RechargeTimer.start(1)
+
+func _on_RechargeTimer_timeout():
+	if (charging):
+		if $Shield/ShieldRecharge/ShieldRecharging.value != 5:
+			$Shield/ShieldRecharge/ShieldRecharging.value += 1
+		else:
+			if Globals.shield != Globals.shield_max:
+				$Shield/ShieldRecharge/ShieldRecharging.value = 0
+			
+		if Globals.shield != Globals.shield_max:
+			$Shield/ShieldRecharge/RechargeTimer.start(1)
+		else:
+			charging = false;
+			Globals.recharge_shield = false
+			

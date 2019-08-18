@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Scripts/BaseLevel.gd" type="Script" id=1]
 [ext_resource path="res://Objects/Enemies/Enemy_Flier.tscn" type="PackedScene" id=2]
@@ -8,8 +8,9 @@
 [ext_resource path="res://Objects/AsteroidLarge.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Objects/AsteroidMedium.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Objects/AsteroidSmall.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Objects/Powerups/Powerup.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Music/02 Underclocked (underunderclocked mix).ogg" type="AudioStream" id=10]
+[ext_resource path="res://Scenes/UI/UI.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Objects/Powerups/Powerup.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Music/02 Underclocked (underunderclocked mix).ogg" type="AudioStream" id=11]
 
 [node name="BaseNode" type="Node2D"]
 position = Vector2( 11, 2 )
@@ -21,9 +22,16 @@ enemy_bomber = ExtResource( 5 )
 asteroid_large = ExtResource( 6 )
 asteroid_medium = ExtResource( 7 )
 asteroid_small = ExtResource( 8 )
-powerup_trail = ExtResource( 9 )
+ui_scene = ExtResource( 9 )
+powerup_trail = ExtResource( 10 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="UIController" parent="UI" instance=ExtResource( 9 )]
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 10 )
+stream = ExtResource( 11 )
+volume_db = -80.0
